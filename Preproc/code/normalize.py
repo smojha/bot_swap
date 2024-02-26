@@ -77,6 +77,7 @@ print("... Orders")
 orders_data = get_df('orders')
 orders_data.drop(['market_price', 'volume', 'part_label'], axis=1, inplace=True)
 orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
+orders_data.drop(['original_quantity', 'automatic'], axis='columns', inplace=True)
 
 
 #%% md
