@@ -1,14 +1,13 @@
 import pandas as pd
 import re
 from pathlib import Path
-import os
 
 
 DATA_DIR = 'Data'
 TEMP_DIR = 'Preproc/temp'
 
 def get_df(base):
-    paths =  Path(DATA_DIR).rglob(f'{base}*.csv')
+    paths =  Path(DATA_DIR).rglob(f'Hybrid*/{base}*.csv')
     dfs =  [pd.read_csv(p) for p in paths]
     concat = pd.concat(dfs)
     return concat
@@ -86,6 +85,13 @@ orders_data.drop(['original_quantity', 'automatic'], axis='columns', inplace=Tru
 print("... Payment")
 payment_data = get_df('payment')
 
+##
+# Landing Data - Contains the quiz
+##
+landing_data = get_df('landingct')
+landing_data.rename(mapper=common_map, axis=1, inplace=True)
+
+
 ###############
 # Validating sessions
 # A cursory check of the data.  If any session is deemed to be incomplete or invalid
@@ -116,6 +122,9 @@ group_data = keep_good_sessions(group_data, good_sessions)
 orders_data = keep_good_sessions(orders_data, good_sessions)
 payment_data = keep_good_sessions(payment_data, good_sessions)
 
+##  Don't run the landing through the good sessions filter.
+## This is run in a separate session
+#landing_data = keep_good_sessions(landing_data, good_sessions)
 
 
 #############################
@@ -128,7 +137,7 @@ sess_data.to_csv(f"{TEMP_DIR}/normalized_session.csv", index=None)
 player_data.to_csv(f"{TEMP_DIR}/normalized_player.csv", index=None)
 group_data.to_csv(f"{TEMP_DIR}/normalized_group.csv", index=None)
 orders_data.to_csv(f"{TEMP_DIR}/normalized_orders.csv", index=None)
-
+landing_data.to_csv(f"{TEMP_DIR}/normalized_landing.csv", index=None)
 
 
 # for c in part_data:

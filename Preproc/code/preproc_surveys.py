@@ -97,25 +97,11 @@ def remove_unneeded(df):
     ret = df.drop(drop, axis='columns')
     return ret
 
-# Grade quiz
-def grade_quiz(df):
-    print("Grading Quiz")
-    df['quiz_1_score'] = df.quiz_1.str.startswith('b').fillna(False).astype(int)
-    df['quiz_2_score'] = df.quiz_2.str.startswith('b').fillna(False).astype(int)
-    df['quiz_3_score'] = df.quiz_3.str.startswith('c').fillna(False).astype(int)
-    df['quiz_4_score'] = df.quiz_4.str.startswith('b').fillna(False).astype(int)
-    df['quiz_5_score'] = df.quiz_5.str.startswith('c').fillna(False).astype(int)
-    
-    df['quiz_score'] = df[['quiz_1_score','quiz_2_score','quiz_3_score','quiz_4_score','quiz_5_score']].sum(axis='index')
-
-    return df
-
 
 if __name__ == '__main__':
     all = join_surveys()
     all = rename_columns(all)
     all = remove_unneeded(all)
-    all = grade_quiz(all)
     
     #
     # Write out the results
