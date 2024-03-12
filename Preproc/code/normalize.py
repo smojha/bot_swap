@@ -13,9 +13,10 @@ def get_df(base):
     return concat
 
 
-common_map={'session.code': 'session'
-            , 'subsession.round_number': 'round'
-            , 'participant.code': 'participant'}
+common_map={'session.code': 'session', 
+            'subsession.round_number': 'round',
+            'participant.label': 'part_label',
+            'participant.code': 'participant'}
 
 def remove_non_part(df, page_name='NonParticipantPage'):
     return df[df['participant._current_page_name'] != page_name].copy()
@@ -28,7 +29,7 @@ def get_variables(start, df, include_rounds=False, include_participant=False):
     if include_rounds:
         names.insert(1, 'round')
     if include_participant:
-        names.insert(1,'participant')
+        names.insert(1,'part_label')
 
     filtered_df = df[names].copy()
     filtered_df.rename(mapper=lambda x: re.sub('.*\.', '', x), axis=1, inplace=True)
@@ -52,7 +53,7 @@ rounds_data.rename(mapper=common_map, axis=1, inplace=True)
 
 # Participant Data
 print("... Participants")
-part_data = get_variables('participant', rounds_data)
+part_data = get_variables('participant', rounds_data, include_participant=True)
 
 # Session Data
 print("... Sessions")
@@ -74,9 +75,9 @@ group_data.drop('id_in_subsession', axis=1, inplace=True)
 #%%
 print("... Orders")
 orders_data = get_df('orders')
-orders_data.drop(['market_price', 'volume', 'part_label'], axis=1, inplace=True)
+orders_data.drop(['market_price', 'volume'], axis=1, inplace=True)
 orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
-orders_data.drop(['original_quantity', 'automatic'], axis='columns', inplace=True)
+orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
 
 
 #%% md
@@ -85,12 +86,17 @@ orders_data.drop(['original_quantity', 'automatic'], axis='columns', inplace=Tru
 print("... Payment")
 payment_data = get_df('payment')
 
+
+print("... Page Times")
+page_time_data = get_df('PageTimes')
+page_time_data.rename({'session_code': 'session'}, axis=1, inplace=True)
+
 ##
 # Landing Data - Contains the quiz
 ##
 landing_data = get_df('landingct')
 landing_data.rename(mapper=common_map, axis=1, inplace=True)
-
+landing_data = get_variables('player', landing_data, include_participant=True)
 
 ###############
 # Validating sessions
@@ -121,6 +127,7 @@ player_data = keep_good_sessions(player_data, good_sessions)
 group_data = keep_good_sessions(group_data, good_sessions)
 orders_data = keep_good_sessions(orders_data, good_sessions)
 payment_data = keep_good_sessions(payment_data, good_sessions)
+page_time_data = keep_good_sessions(page_time_data, good_sessions)
 
 ##  Don't run the landing through the good sessions filter.
 ## This is run in a separate session
@@ -138,7 +145,8 @@ player_data.to_csv(f"{TEMP_DIR}/normalized_player.csv", index=None)
 group_data.to_csv(f"{TEMP_DIR}/normalized_group.csv", index=None)
 orders_data.to_csv(f"{TEMP_DIR}/normalized_orders.csv", index=None)
 landing_data.to_csv(f"{TEMP_DIR}/normalized_landing.csv", index=None)
-
+payment_data.to_csv(f"{TEMP_DIR}/normalized_payment.csv", index=None)
+page_time_data.to_csv(f"{TEMP_DIR}/normalized_page_times.csv", index=None)
 
 # for c in part_data:
 #     print ("Casting ", c, part_data[c].dtype.kind)

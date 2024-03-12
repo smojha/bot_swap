@@ -23,9 +23,15 @@ def join_surveys():
     # Rename if participant labels to something common (part_label)
     f = lambda x:  'part_label' if x in idx_cols else x
     
-    pre_1 = pre_1.rename(mapper=f, axis=1).set_index('part_label')
-    pre_2 = pre_2.rename(mapper=f, axis=1).set_index('part_label')
-    post = post.rename(mapper=f, axis=1).set_index('part_label')
+    pre_1.rename(mapper=f, axis=1, inplace=True)
+    pre_2.rename(mapper=f, axis=1, inplace=True)
+    post.rename(mapper=f, axis=1, inplace=True)
+    
+    #
+    #  Somehow, we are getting duplicate submissions.  Remove the duplicates
+    pre_1.drop_duplicates(subset='part_label', inplace=True)
+    pre_2.drop_duplicates(subset='part_label', inplace=True)
+    post.drop_duplicates(subset='part_label', inplace=True)
     
     #
     # Join the survey data frames together

@@ -29,14 +29,14 @@ order_data['sell_quant'] = order_data.is_sell * order_data.quantity
 order_data['buy_quant'] = (1 - order_data.is_sell) * order_data.quantity
 
 # For each participant and round, tally the buy and sell quantities.
-buy_sell = order_data.groupby(['participant', 'round'])[['buy_quant', 'sell_quant']].sum()
+buy_sell = order_data.groupby(['part_label', 'round'])[['buy_quant', 'sell_quant']].sum()
 
 # Join the buy / sell quantities to the player data.
 # Player data is naturally organized by participant and round number
 # ".join" is a left join by default, so missing values are set to "nan"
 # Set "NaN"s to zero and recast to int.
 print("Join buy / sell quantites to player data")
-p_with_sell_q =  player_data.join(buy_sell, on=['participant', 'round'])
+p_with_sell_q =  player_data.join(buy_sell, on=['part_label', 'round'])
 p_with_sell_q.sell_quant = p_with_sell_q.sell_quant.fillna(0).astype(int)
 p_with_sell_q.buy_quant = p_with_sell_q.buy_quant.fillna(0).astype(int)
 

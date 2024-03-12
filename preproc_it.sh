@@ -18,6 +18,11 @@ python Preproc/code/normalize.py
 python Preproc/code/preproc_surveys.py
 python Preproc/code/preproc_player_group_orders.py
 
+#python Preproc/code/preproc_counterfactuals.py
+python Preproc/code/preproc_participant.py
+python Preproc/code/preproc_page_time.py
+
+
 
 # copy files to output
 base='preproc_'
