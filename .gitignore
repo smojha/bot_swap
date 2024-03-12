@@ -1,5 +1,8 @@
 */temp
 */output
 **/.DS_Store
+*/.DS_Store
+**/__pycache__
+notebooks
 .ipynb_checkpoints
 .virtual_documents
