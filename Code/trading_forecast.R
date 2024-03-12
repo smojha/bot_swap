@@ -17,14 +17,17 @@ rm(list=ls())
 
 # Load the data
 # Pilot 5
-data <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/rounds_2024-02-20.csv') # Pilot 5 online
+data <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/actual markets/03_07_2024_hybrid/rounds_2024-03-07.csv') # First hybrid market
 
+#data <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/rounds_2024-02-20.csv') # Pilot 5 online
 #data <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_03_23_11_30/rounds_2023-11-30_forecast.xlsx', sheet = 'clean') # Pilot 3
+
 # Prolific participants for pilot3 : 86T si 04R
 # subject1 = 14L, rest are subject2, 3, 4
 
 #import orders 
-data_orders <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/orders_2024-02-20.csv') # Pilot 3
+data_orders <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/actual markets/03_07_2024_hybrid/orders_2024-03-07.csv') # First hybrid market
+#data_orders <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/orders_2024-02-20.csv') # Pilot 3
 #data_orders <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_03_23_11_30/orders_2023-11-30.xlsx') # Pilot 3
 
 data_orders <- data_orders %>%
@@ -173,8 +176,9 @@ plot(bid_deviations)
 
 
 # Save the plot to a PNG file
+ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/hybrid_03072024/deviation_from_avg_bid_to_market_price.png", bid_deviations, width = 12, height = 8, dpi = 300)
 #ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/deviation_from_avg_bid_to_market_price.png", bid_deviations, width = 12, height = 8, dpi = 300)
-ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/bid_deviations.png", bid_deviations, width = 10, height = 8)
+#ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/bid_deviations.png", bid_deviations, width = 10, height = 8)
 
 
 # Plotting deviations for asks with group.price
@@ -210,8 +214,10 @@ ask_deviations <- ggplot(deviations_ask, aes(x = period)) +
 plot(ask_deviations)
 
 # Save the plot to a PNG file
+ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/hybrid_03072024/deviation_from_avg_ask_to_market_price.png", ask_deviations, width = 12, height = 8, dpi = 300)
+
 #ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/deviation_from_avg_ask_to_market_price.png", ask_deviations, width = 12, height = 8, dpi = 300)
-ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/ask_deviations.png", ask_deviations, width = 10, height = 8)
+#ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/ask_deviations.png", ask_deviations, width = 10, height = 8)
 
 
 ##### Average bid-ask deviation
@@ -271,15 +277,15 @@ bid_ask_deviations <- ggplot(deviations_bid_ask, aes(x = period)) +
 plot(bid_ask_deviations)
 
 #Save files:
-ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/deviation_from_avg_ask_to_market_price.png", bid_ask_deviations, width = 12, height = 8, dpi = 300)
+#ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/deviation_from_avg_ask_to_market_price.png", bid_ask_deviations, width = 12, height = 8, dpi = 300)
 
 
 
 #### 3. Average forecast curve
 # Read the CSV file (replace 'forecast_data.xlsx' with actual file path)
+forecast_data <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/actual markets/03_07_2024_hybrid/rounds_2024-03-07.xlsx', sheet='rounds_2024-03-07') # First hybrid market
 
-forecast_data <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/rounds_2024-02-20.csv')
-
+#forecast_data <- read_csv('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/rounds_2024-02-20.csv')
 #forecast_data <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_01_12/rounds_2024-01-12_forecast.xlsx', sheet = 'forecast') # Pilot 4, online only
 #forecast_data <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_03_23_11_30/rounds_2023-11-30_forecast.xlsx', sheet = 'forecast') # Pilot 3
 #forecast_data <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_01_23_11_16/rounds_2023-11-16_forecast.xlsx', sheet = 'forecast') # Pilot 1
@@ -309,10 +315,12 @@ forecast_data <- forecast_data %>%
 forecast_matrix <- matrix(NA, nrow = 33, ncol = 4)
 colnames(forecast_matrix) <- paste("Forecast for Period", 0:3)
 
+no_participants=max(forecast_data$participant.id_in_session)
+
 # Calculate the averages and fill the matrix
 for (round in 1:33) {
-  start_row <- (round - 1) * 18 + 1 # 18 here because there are 18 participants, change accordingly
-  end_row <- round * 18 # 18 here because there are 18 participants, change accordingly
+  start_row <- (round - 1) * no_participants + 1 # 21 here because there are 21 participants, change accordingly
+  end_row <- round * no_participants # 21 here because there are 21 participants, change accordingly
   for (period in 1:4) {
     column_name <- paste("player.f", period - 1, sep = "")
     # Extract data as a numeric vector
@@ -329,23 +337,24 @@ for (round in 1:33) {
 forecast_matrix
 
 # Drop first 3 rows
-# Drop the first 3 rows from the original forecast_matrix
+# Drop the first 3 rows from the original forecast_matrix (practice rounds)
 forecast_matrix_30 <- forecast_matrix[-c(1:3), ]
+forecast_matrix_30
 
 # Initialize a new matrix for shifted data
 shifted_matrix <- matrix(NA, nrow = 30, ncol = 4)
 colnames(shifted_matrix) <- paste("Forecast for Period", 0:3)
 
 # Shift forecasts as specified
-
 shifted_matrix[, 1] <- forecast_matrix_30[, 1] # No shift for Period 0 (column 1)
 shifted_matrix[2:30, 2] <- forecast_matrix_30[1:29, 2] # Shift Period 1 (column 2) so that rows start from row 2, row 1 will be NA
 shifted_matrix[5:30, 3] <- forecast_matrix_30[1:26, 3] # Shift Period 2 (column 3) so that rows start from row 5, rows 1-4 will be NA
 shifted_matrix[10:30, 4] <- forecast_matrix_30[1:21, 4] # Shift Period 3 (column 4) so that rows start from row 10, rows 1-9 will be NA
+shifted_matrix
 
 ## Add group.price to shifted_matrix from deviations
 # Assuming 'deviations' contains a 'group.price' column with at least 30 observations
-group_prices <- deviations_bid_ask$group_price[1:30]
+group_prices <- deviations_bid$group_price[1:30]
 
 # Add group.price to the shifted matrix as a new column
 shifted_matrix <- cbind(shifted_matrix, group.price = group_prices)
@@ -353,15 +362,15 @@ shifted_matrix <- cbind(shifted_matrix, group.price = group_prices)
 # Convert to dataframe
 forecast_df_shifted <- as.data.frame(shifted_matrix)
 forecast_df_shifted$period <- 1:30 # add period as x-axis for figure in qqplot2
-colnames(forecast_df_shifted) <- c("f0", "f1", "f2", "f3", "group.price", "period") # rename columns
+colnames(forecast_df_shifted) <- c("f0", "f2", "f5", "f10", "group.price", "period") # rename columns
 
 
 # Plot the data
 forecast_curve <- ggplot(forecast_df_shifted, aes(x = period)) +
   geom_line(aes(y = f0, color = "Forecast Period 0"), linetype = "dashed", size = 1.2) +
-  geom_line(aes(y = f1, color = "Forecast Period 2"), linetype = "dashed", size = 1.2) +
-  geom_line(aes(y = f2, color = "Forecast Period 5"), linetype = "dashed", size = 1.2) +
-  geom_line(aes(y = f3, color = "Forecast Period 10"), linetype = "dashed", size = 1.2) +
+  geom_line(aes(y = f2, color = "Forecast Period 2"), linetype = "dashed", size = 1.2) +
+  geom_line(aes(y = f5, color = "Forecast Period 5"), linetype = "dashed", size = 1.2) +
+  geom_line(aes(y = f10, color = "Forecast Period 10"), linetype = "dashed", size = 1.2) +
   geom_line(aes(y = group.price, color = "Market Price"), linetype = "solid", size = 1.2) +
   geom_point(aes(y = group.price, color = "Market Price"), size = 1) +
   geom_hline(yintercept = 14, linetype = "dashed", color = "black", size = 1.2) +
@@ -381,23 +390,25 @@ forecast_curve <- ggplot(forecast_df_shifted, aes(x = period)) +
 plot(forecast_curve)
 
 # save plots
+ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/hybrid_03072024/forecast_curve_hybrid.png", forecast_curve, width = 12, height = 8, dpi = 300)
+
 #ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/forecast_curve.png", forecast_curve, width = 10, height = 8)
-ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/forecast_curve.png", forecast_curve, width = 10, height = 8)
+#ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/forecast_curve.png", forecast_curve, width = 10, height = 8)
 
 forecast_matrix_df = forecast_df_shifted
 
 # Add new columns for the difference between price and each forecast
 forecast_matrix_df$diff_f0 = forecast_matrix_df$group.price - forecast_matrix_df$f0
-forecast_matrix_df$diff_f1 = forecast_matrix_df$group.price - forecast_matrix_df$f1
 forecast_matrix_df$diff_f2 = forecast_matrix_df$group.price - forecast_matrix_df$f2
-forecast_matrix_df$diff_f3 = forecast_matrix_df$group.price - forecast_matrix_df$f3
+forecast_matrix_df$diff_f5 = forecast_matrix_df$group.price - forecast_matrix_df$f5
+forecast_matrix_df$diff_f10 = forecast_matrix_df$group.price - forecast_matrix_df$f10
 
 # Plotting the differences (surprise)
 forecast_curve_surprise <- ggplot(forecast_matrix_df, aes(x = period)) +
   geom_line(aes(y = diff_f0, color = "Price - Forecast 0"), linetype = "dashed", size = 1.2) +
-  geom_line(aes(y = diff_f1, color = "Price - Forecast 2"), linetype = "dashed", size = 1.2) +
-  geom_line(aes(y = diff_f2, color = "Price - Forecast 5"), linetype = "dashed", size = 1.2) +
-  geom_line(aes(y = diff_f3, color = "Price - Forecast 10"), linetype = "dashed", size = 1.2) +
+  geom_line(aes(y = diff_f2, color = "Price - Forecast 2"), linetype = "dashed", size = 1.2) +
+  geom_line(aes(y = diff_f5, color = "Price - Forecast 5"), linetype = "dashed", size = 1.2) +
+  geom_line(aes(y = diff_f10, color = "Price - Forecast 10"), linetype = "dashed", size = 1.2) +
   geom_line(aes(y = group.price, color = "Market Price"), linetype = "solid", size = 1.2) +
   geom_point(aes(y = group.price, color = "Market Price"), size = 1) +
   geom_hline(yintercept = 14, linetype = "dashed", color = "black", size = 1.2) +
@@ -418,37 +429,101 @@ forecast_curve_surprise <- ggplot(forecast_matrix_df, aes(x = period)) +
 
 # Display the plot
 plot(forecast_curve_surprise)
+ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/hybrid_03072024/forecast_curve_surprise_hybrid.png", forecast_curve_surprise, width = 12, height = 8, dpi = 300)
 #ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/figures/forecast/forecast_curve_surprise.png", forecast_curve_surprise, width = 10, height = 8, dpi=300)
-ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/forecast_curve_surprise.png", forecast_curve_surprise, width = 10, height = 8)
+#ggsave("/Users/mihai/Desktop/Caltech/Neurofinance/data/piloting/pilot_2024_02_20_online/forecast_curve_surprise.png", forecast_curve_surprise, width = 10, height = 8)
 
 ## Add analysis on empatica E4 data correlations and regressions
 # Aggregate EDA by participant and period
-eda_data <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/empatica/data_analysis/_all_subjects_EDA_statistics.xlsx') # Pilot 3 Empatica data EDA
+
+#eda_data <- read_excel('/Users/mihai/PycharmProjects/stockPredict/neurofinance/data_analysis/EDA_hybrid_0307_data.xlsx') # Pilot 3 Empatica data EDA
+
+#eda_data <- read_excel('/Users/mihai/Desktop/Caltech/Neurofinance/data/empatica/data_analysis/_all_subjects_EDA_statistics_1130.xlsx') # Pilot 3 Empatica data EDA
+
+order_submission_df <- read_excel('/Users/mihai/PycharmProjects/stockPredict/neurofinance/data_analysis/EDA_hybrid_0307_data.xlsx', sheet = 'Phasic Order-submission')
+forecast_price_df <- read_excel('/Users/mihai/PycharmProjects/stockPredict/neurofinance/data_analysis/EDA_hybrid_0307_data.xlsx', sheet = 'Phasic Price Forecast')
+round_results_df <- read_excel('/Users/mihai/PycharmProjects/stockPredict/neurofinance/data_analysis/EDA_hybrid_0307_data.xlsx', sheet = 'Phasic Round Results')
+risk_elicitation_df <- read_excel('/Users/mihai/PycharmProjects/stockPredict/neurofinance/data_analysis/EDA_hybrid_0307_data.xlsx', sheet = 'Phasic Risk Elicitation')
+
+# Rename the 'Mean' column in each dataframe for clarity
+# Rename 'Trading Period' to 'period' and 'Mean' to more descriptive names
+order_submission_df <- rename(order_submission_df, mean_order_submission = Mean)
+forecast_price_df <- rename(forecast_price_df, mean_forecast_price = Mean)
+round_results_df <- rename(round_results_df, mean_round_results = Mean)
+risk_elicitation_df <- rename(risk_elicitation_df, mean_risk_elicitation = Mean)
+
+# Merge the dataframes by 'period'
+combined_data <- reduce(list(order_submission_df, forecast_price_df, round_results_df, risk_elicitation_df), full_join, by = c("Subject ID", "Trading Period"))
+final_data <- combined_data %>%
+  rename(period = `Trading Period`) %>%
+  select(`Subject ID`, period, mean_order_submission, mean_forecast_price, mean_round_results, mean_risk_elicitation)
 
 # Assuming 'eda_data' contains your described structure
-averaged_data <- eda_data %>%
+averaged_data <- final_data %>%
   group_by(period) %>%
   summarise(
-    avg_order_submission = mean(order_submission, na.rm = TRUE),
-    avg_forecast_price = mean(forecast_price, na.rm = TRUE),
-    avg_round_results = mean(round_results, na.rm = TRUE),
-    avg_risk_elicitation = mean(risk_elicitation, na.rm = TRUE)
+    avg_order_submission = mean(mean_order_submission, na.rm = TRUE),
+    avg_forecast_price = mean(mean_forecast_price, na.rm = TRUE),
+    avg_round_results = mean(mean_round_results, na.rm = TRUE),
+    avg_risk_elicitation = mean(mean_risk_elicitation, na.rm = TRUE)
   )
 
 # View the resulting averaged data
 print(averaged_data) #order_submission	forecast_price	round_results	risk_elicitation
 
 # Filter for different forecast periods
-f0_deviation <- forecast_matrix_df$price - forecast_matrix_df$f0
-f1_deviation <- forecast_matrix_df$price - forecast_matrix_df$f1
-f2_deviation <- forecast_matrix_df$price - forecast_matrix_df$f2
-f3_deviation <- forecast_matrix_df$price - forecast_matrix_df$f3
+f0_deviation <- forecast_matrix_df$group.price - forecast_matrix_df$f0
+f1_deviation <- forecast_matrix_df$group.price - forecast_matrix_df$f1
+f2_deviation <- forecast_matrix_df$group.price - forecast_matrix_df$f2
+f3_deviation <- forecast_matrix_df$group.price - forecast_matrix_df$f3
 
 # Combine data to perform regressions
 combined_data <- inner_join(averaged_data, forecast_matrix_df, by = "period")
+combined_data <- combined_data %>%
+  mutate(log_price_change = log(group.price) - log(lag(group.price))) %>%
+  ungroup() # Remove the grouping
+
+# combined_data now includes 'price' and forecasts ('f0', 'f1', 'f2', 'f3'), recalculate deviations just before plotting
+#combined_data <- combined_data %>%
+#  mutate(f3_deviation = group.price - f3)
+
+# plot price vs empatica
+# Plot for avg_order_submission
+p1 <- ggplot(combined_data, aes(x = period)) +
+  geom_line(aes(y = avg_order_submission), color = "blue") +
+  scale_y_continuous(name = "Avg Order Submission", limits = c(-5, 0)) +
+  theme_minimal()
+
+p1
+
+# Second plot (Secondary Axis)
+p2 <- ggplot(combined_data, aes(x = period)) +
+  geom_line(aes(y = group.price), color = "red") +
+  scale_y_continuous(name = "Group Price", limits = c(0, 100)) +
+  theme_minimal()
+
+p2
+
+ggplot() +
+  geom_line(data = combined_data, aes(x = period, y = avg_order_submission, colour = "Avg Order Submission")) +
+  geom_line(data = combined_data, aes(x = period, y = group.price / 100, colour = "Group Price")) + # Note: Adjusted for visibility
+  scale_colour_manual(values = c("Avg Order Submission" = "blue", "Group Price" = "red")) +
+  labs(y = "Values", x = "Period", title = "Combined Plot") +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+
+
+
+# Plot 
+ggplot(combined_data, aes(x = avg_risk_elicitation, y = log_price_change)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Avg Order Submission E4 EDA vs. Forecast",
+       x = "Average Forecast Price EDA", y = "Price Returns") +
+  theme_minimal()
 
 # Example: Plotting avg_order_submission against consecutive_risky
-ggplot(combined_data, aes(x = avg_forecast_price, y = f3_deviation)) +
+ggplot(combined_data, aes(x = avg_forecast_price, y = diff_f3)) +
   geom_point() +
   geom_smooth(method = "lm") +  # Adding a linear trend line
   labs(title = "Avg Order Submission E4 EDA vs. Forecast",
