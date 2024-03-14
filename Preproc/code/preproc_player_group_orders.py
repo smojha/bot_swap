@@ -5,6 +5,20 @@ player_data = pd.read_csv('Preproc/temp/normalized_player.csv')
 order_data = pd.read_csv('Preproc/temp/normalized_orders.csv')
 group_data = pd.read_csv('Preproc/temp/normalized_group.csv')
 
+
+# purging practice rounds
+print("\t... Purging practice rounds")
+group_data = group_data[group_data.is_practice == 0].copy()
+np_rounds = group_data['round'].values
+start_round = min(np_rounds)
+player_data = player_data[player_data['round'] >= start_round].copy()
+order_data = order_data[order_data['round'] >= start_round].copy()
+
+#Renmber the rounds
+group_data['round'] = group_data['round'] - start_round + 1
+player_data['round'] = player_data['round'] - start_round + 1
+order_data['round'] = order_data['round'] - start_round + 1
+
 print("Determine short selling and buybacks for counterfactuals")
 
 ## is margin violation
