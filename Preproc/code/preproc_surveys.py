@@ -32,6 +32,11 @@ def join_surveys():
     pre_1.drop_duplicates(subset='part_label', inplace=True)
     pre_2.drop_duplicates(subset='part_label', inplace=True)
     post.drop_duplicates(subset='part_label', inplace=True)
+
+    
+    pre_1 = pre_1.set_index('part_label')
+    pre_2 = pre_2.set_index('part_label')
+    post = post.set_index('part_label')
     
     #
     # Join the survey data frames together
@@ -111,4 +116,4 @@ if __name__ == '__main__':
     
     #
     # Write out the results
-    all.to_csv(f"{TEMP_DIR}/preproc_surveys.csv")
+    all.to_csv(f"{TEMP_DIR}/temp_surveys.csv")

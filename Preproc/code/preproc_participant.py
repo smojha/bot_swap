@@ -5,7 +5,7 @@ print("Preprocessing participants")
 
 TEMP_DIR = 'Preproc/temp'
 part_data = pd.read_csv(f'{TEMP_DIR}/normalized_part.csv')
-survey_data = pd.read_csv(f'{TEMP_DIR}/preproc_surveys.csv').set_index('part_label')
+survey_data = pd.read_csv(f'{TEMP_DIR}/temp_surveys.csv').set_index('part_label')
 group_data = pd.read_csv(f'{TEMP_DIR}/normalized_group.csv')
 player_data = pd.read_csv(f'{TEMP_DIR}/normalized_player.csv')
 sess_data = pd.read_csv(f'{TEMP_DIR}/normalized_session.csv')
