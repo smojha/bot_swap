@@ -1,10 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import sys
 
-# if 'Analysis/code' not in sys.path:
-#     sys.path.insert(0, 'Analysis/code')
-# from Analysis.code.SessionPlotter import SessionPlotter, SessionPlotModifier
+print("## Generating Basic Session Plots")
 
 INPUT_DIR = 'Analysis/input'
 TEMP_DIR = 'Analysis/temp'
@@ -16,13 +13,13 @@ sess_data = pd.read_csv(f'{INPUT_DIR}/session.csv').set_index('session')
 
 TOB = (3, 1)
 LABEL_SIZE = 16
-SESSION_FIG_SIZE = (21, 6)
+SESSION_FIG_SIZE = (10, 6)
 
 def plot_session(session, price, volume, shares, figsize=SESSION_FIG_SIZE):
     
     rounds = price.index.values
     
-    f = plt.figure(figsize=figsize).set_facecolor('white')
+    plt.figure(figsize=figsize).set_facecolor('white')
     plot_1 = plt.subplot2grid(TOB, (0, 0))
     plot_2 = plt.subplot2grid(TOB, (1, 0), sharex=plot_1)
     plot_3 = plt.subplot2grid(TOB, (2, 0), sharex=plot_1)
@@ -40,7 +37,6 @@ def plot_session(session, price, volume, shares, figsize=SESSION_FIG_SIZE):
     
     #Share Paths
     part_codes = set(shares.index.get_level_values(0))
-    # plot_margin_call_lines(plot_3, just_mv, autos, shares)
     for code in part_codes:
         plot_3.plot(shares.loc[code], color='lightgray')
     plot_3.set_ylabel('Shares', fontsize=LABEL_SIZE)

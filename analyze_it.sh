@@ -11,6 +11,7 @@ rm -f Analysis/temp/*
 [ -d Analysis/output ] || mkdir Analysis/output
 rm -f Analysis/output/*
 
+#export PYTHONPATH='Analysis/code'
 
 # Copy 
 [ -d Analysis/input ] || mkdir Analysis/input
@@ -19,6 +20,7 @@ cp Preproc/output/* Analysis/input/
 
 # run the prepoc code
 python Analysis/code/market_charts.py
+python Analysis/code/forecast_plots.py
 
 
 # copy files to output
