@@ -1,7 +1,10 @@
 
 import pandas as pd
 
-print("Preprocessing participants")
+LAB_SHOWUP = 20
+
+print("\n###############")
+print("## Preprocessing participants")
 
 TEMP_DIR = 'Preproc/temp'
 part_data = pd.read_csv(f'{TEMP_DIR}/normalized_part.csv')
@@ -15,13 +18,19 @@ payment_data = pd.read_csv(f'{TEMP_DIR}/normalized_payment.csv').set_index('part
 
 cols_to_drop = ['_is_bot', '_max_page_index', '_index_in_pages', '_current_page_name', '_current_app_name', 'visited', 'mturk_worker_id', 'mturk_assignment_id']
 
-print("Removing unnecessary columns")
+print("\t...Removing unnecessary columns")
 part_data.drop(cols_to_drop, axis=1, inplace=True)
 
-print("Joining survey data")
+## Site Variable
+print ("\t... Site variable")
+is_lab =  part_data.part_label.str.len() < 20
+part_data['site'] = 'Prolific'
+part_data.loc[is_lab, 'site'] = 'Lab'
+
+print("\t...Joining survey data")
 part_with_survey = part_data.join(survey_data, on='part_label')
 #%%
-print("Joining instruction data")
+print("\t...Joining instruction data")
 landing_data.drop(['session', 'id_in_group'], axis=1, inplace=True)
 part_final = part_with_survey.join(landing_data, on='part_label')
 #%%
@@ -36,7 +45,7 @@ def grade_column(df, column, answer, fill=0):
     df[score_col] = df[score_col].astype(int)
 
 # Grade the quiz
-print("Grading quiz")
+print("\t...Grading quiz")
 grade_column(part_final, 'quiz_1_init', 2)
 grade_column(part_final, 'quiz_2_init', 2)
 grade_column(part_final, 'quiz_3_init', 210)
@@ -53,10 +62,13 @@ part_final['took_quiz'] = (~missing_all).astype(int)
 # Calculate Payouts
 ####
 # TODO:   Remove this and place the payouts in the experiment sensibly.
-print("Joining Payouts")
-
+print("\t...Joining Payouts")
 cols=['clicked_button', 'market_bonus', 'forecast_bonus', 'risk_bonus', 'total_bonus', 'showup', 'total_payment']
 part_final = part_final.join(payment_data[cols], on='part_label')
+
+# Lab participants earn a payout of 20
+part_final.loc[part_final.site == 'Lab', 'showup'] = LAB_SHOWUP
+part_final.total_payment = part_final.showup + part_final.total_bonus
 
 
 #########
