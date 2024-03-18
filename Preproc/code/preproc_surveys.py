@@ -95,7 +95,17 @@ def rename_columns(df):
      }
     
     return df.rename(mapper=mapper, axis=1)
-     
+
+
+def fix_number_cols(df):
+    print("# Fix number columns")
+    df['invest_100_post'] = df.invest_100_post.str.extract(r'(\d+)').astype(float)
+    df['inv_pre_num'] = df.invest_100_pre.str.extract(r'(\d+)').astype(float)
+
+    df['age'] = df.age.str.extract(r'(\d+)').astype(float)
+    
+    return df
+
 
 #Remove the Timestamp and Unnamed columns
 def remove_unneeded(df):
@@ -113,6 +123,7 @@ if __name__ == '__main__':
     all = join_surveys()
     all = rename_columns(all)
     all = remove_unneeded(all)
+    all = fix_number_cols(all)
     
     #
     # Write out the results
