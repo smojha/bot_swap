@@ -101,7 +101,7 @@ def fix_number_cols(df):
     print("# Fix number columns")
     df['invest_100_post'] = df.invest_100_post.str.extract(r'(\d+)').astype(float)
     df['inv_pre_num'] = df.invest_100_pre.str.extract(r'(\d+)').astype(float)
-
+    df['self_place'] = df.self_place.str.extract(r'(\d+)').astype(float)
     df['age'] = df.age.str.extract(r'(\d+)').astype(float)
     
     return df
