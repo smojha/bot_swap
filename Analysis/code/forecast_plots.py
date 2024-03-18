@@ -40,12 +40,14 @@ class ForecastModifier(SessionPlotModifier):
         for _, row in f_data.iterrows():
             y = [ row.f0, row.f1, row.f2, row.f3 ]
             x = [ row.fcast_rnd_0, row.fcast_rnd_1, row.fcast_rnd_2, row.fcast_rnd_3 ]
-            plot.plot(x, y, color='gray', label=None)
             
-            lab = "Current period forecast" if is_first else None
+            f_lab = "Forecasts" if is_first else None
+            plot.plot(x, y, color='lightgray', label=f_lab)
+            
+            dot_lab = "Current period forecast" if is_first else None
             is_first = False
                 
-            plot.plot(x[0], y[0], color='gray', marker='o', label=lab)
+            plot.plot(x[0], y[0], color='gray', linestyle='', marker='o', label=dot_lab)
             
         
 fmod_for_session = lambda s: ForecastModifier(s)
