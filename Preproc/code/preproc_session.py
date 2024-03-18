@@ -7,7 +7,7 @@ print("## Preproc Session")
 
 TEMP_DIR = 'Preproc/temp'
 sess_data = pd.read_csv(f'{TEMP_DIR}/normalized_session.csv').set_index('session')
-group_data = pd.read_csv(f'{TEMP_DIR}/preproc_group.csv')
+group_data = pd.read_csv(f'{TEMP_DIR}/normalized_group.csv')
 player_data = pd.read_csv(f'{TEMP_DIR}/normalized_player.csv')
 
 n = player_data.groupby(['session', 'round']).id_in_group.count().groupby('session').max()
@@ -85,8 +85,9 @@ def get_duration(prices):
 durs = []
 sessions = []
 for sess in group_data.session.unique():
-    p = group_data[group_data.session == sess][['price', 'prev_price']]
-    durs.append(get_duration(p))
+    p = group_data[group_data.session == sess].copy()
+    p['prev_price'] = p.price.shift(1)
+    durs.append(get_duration(p[['price', 'prev_price']]))
     sessions.append(sess)
 
 DUR = pd.Series(durs, index=pd.Index(sessions, name='session'), name='dur')
@@ -99,5 +100,18 @@ metrics = pd.concat([RAD,  AB, TD, PA, DUR], axis=1)
 print("\t... Adding bubble metrics")
 sess_data = sess_data.join(metrics)
 
+
+print("\t... Finding market peaks")
+peaks = group_data.groupby('session').price.max()
+peaks.name = 'peak_price'
+
+def get_peak_round(df):
+    idx = df.set_index('round').price.argmax()
+    return df['round'].iloc[idx]
+max_round = group_data.groupby('session').apply(get_peak_round)
+max_round.name = 'peak_round'
+
+sess_data = sess_data.join(peaks)
+sess_data = sess_data.join(max_round)
 
 sess_data.to_csv(f'{TEMP_DIR}/preproc_session.csv')

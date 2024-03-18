@@ -4,6 +4,7 @@ import pandas as pd
 player_data = pd.read_csv('Preproc/temp/normalized_player.csv')
 order_data = pd.read_csv('Preproc/temp/normalized_orders.csv')
 group_data = pd.read_csv('Preproc/temp/normalized_group.csv')
+sess_data = pd.read_csv('Preproc/temp/preproc_session.csv').set_index('session')
 
 
 # purging practice rounds
@@ -14,7 +15,7 @@ start_round = min(np_rounds)
 player_data = player_data[player_data['round'] >= start_round].copy()
 order_data = order_data[order_data['round'] >= start_round].copy()
 
-#Renmber the rounds
+#Renumber the rounds
 group_data['round'] = group_data['round'] - start_round + 1
 player_data['round'] = player_data['round'] - start_round + 1
 order_data['round'] = order_data['round'] - start_round + 1
@@ -65,6 +66,12 @@ prev_price = group_data.groupby('session').price.shift(1)
 # Insert the lagged price into the data frame immediately after the market price.
 group_data.insert(3, 'prev_price', prev_price)
 
+# Group - Peak round diff
+peak_rnd_df = group_data.join(sess_data.peak_round, on='session')
+pk_rnd_diff = peak_rnd_df['round'] - peak_rnd_df.peak_round
+pk_rnd_diff.name = 'pk_rnd_diff'
+group_data['pk_rnd_diff'] = pk_rnd_diff
+
 start_price = group_data.set_index(['session', 'round']).prev_price
 start_price.name = 'market_price'
 start_price = start_price.fillna(14)  # this should be round one price, set to the fundamental value.
@@ -76,6 +83,14 @@ df = p_with_sell_q.join(start_price, on=['session', 'round'])
 print("Equity calculations")
 df['stock_value'] = df.shares * df.market_price
 df['equity'] = df.shares * df.market_price + df.cash
+
+
+
+# Player - peak round diff
+peak_rnd_df = df.join(sess_data.peak_round, on='session')
+pk_rnd_diff = peak_rnd_df['round'] - peak_rnd_df.peak_round
+pk_rnd_diff.name = 'pk_rnd_diff'
+df['pk_rnd_diff'] = pk_rnd_diff
 
 #%%
 # Write all out to the temp directory
