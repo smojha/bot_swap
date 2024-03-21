@@ -6,6 +6,7 @@ order_data = pd.read_csv('Preproc/temp/normalized_orders.csv')
 group_data = pd.read_csv('Preproc/temp/normalized_group.csv')
 sess_data = pd.read_csv('Preproc/temp/preproc_session.csv').set_index('session')
 
+print("## Preproc Group - Player - Orders")
 
 # purging practice rounds
 print("\t... Purging practice rounds")
@@ -20,7 +21,7 @@ group_data['round'] = group_data['round'] - start_round + 1
 player_data['round'] = player_data['round'] - start_round + 1
 order_data['round'] = order_data['round'] - start_round + 1
 
-print("Determine short selling and buybacks for counterfactuals")
+print("\t... Determine short selling and buybacks for counterfactuals")
 
 ## is margin violation
 player_data['is_mv'] = player_data['periods_until_auto_buy'] != -99
@@ -37,7 +38,7 @@ order_data = order_data.reset_index().rename(mapper={'index': 'uid'}, axis=1)
 # encode order type as a boolean True:SELL; False:BUY
 order_data['is_sell'] = (order_data.type == 'SELL')
 
-print("Splitting orders into BUYS and SELLS and tally buy and sell quantities for each player-round")
+print("\t... Splitting orders into BUYS and SELLS and tally buy and sell quantities for each player-round")
 # sell_quant is 0 for buy orders and the same as quantity for sell orders
 order_data['sell_quant'] = order_data.is_sell * order_data.quantity
 # buy_quant is 0 for sell orders and the same as quantity for buy orders
@@ -50,7 +51,7 @@ buy_sell = order_data.groupby(['part_label', 'round'])[['buy_quant', 'sell_quant
 # Player data is naturally organized by participant and round number
 # ".join" is a left join by default, so missing values are set to "nan"
 # Set "NaN"s to zero and recast to int.
-print("Join buy / sell quantites to player data")
+print("\t... Join buy / sell quantites to player data")
 p_with_sell_q =  player_data.join(buy_sell, on=['part_label', 'round'])
 p_with_sell_q.sell_quant = p_with_sell_q.sell_quant.fillna(0).astype(int)
 p_with_sell_q.buy_quant = p_with_sell_q.buy_quant.fillna(0).astype(int)
@@ -61,7 +62,7 @@ p_with_sell_q.buy_quant = p_with_sell_q.buy_quant.fillna(0).astype(int)
 # Previous Price - Lag of market price
 # It is important to not here that "prev_price" is the market price that prevails at the start of the round
 # "price" is the market price that is calculated based on the orders submitted during that round.
-print("Lagging market prices")
+print("\t... Lagging market prices")
 prev_price = group_data.groupby('session').price.shift(1)
 # Insert the lagged price into the data frame immediately after the market price.
 group_data.insert(3, 'prev_price', prev_price)
@@ -77,10 +78,15 @@ start_price.name = 'market_price'
 start_price = start_price.fillna(14)  # this should be round one price, set to the fundamental value.
 #%%
 
+# Returns
+print("\t... Calculating Returns")
+group_data['rnd_returns'] = (group_data.price - group_data.prev_price) / group_data.prev_price
+
+
 # Join that previous price (now "market_price") into the working player data.
 df = p_with_sell_q.join(start_price, on=['session', 'round'])
 # Adding equity and margin related variables (again this is the working version of the player data)
-print("Equity calculations")
+print("\t... Equity calculations")
 df['stock_value'] = df.shares * df.market_price
 df['equity'] = df.shares * df.market_price + df.cash
 
@@ -94,7 +100,7 @@ df['pk_rnd_diff'] = pk_rnd_diff
 
 #%%
 # Write all out to the temp directory
-print("Write to disk")
+print("\t... Write to disk")
 group_data.to_csv('Preproc/temp/preproc_group.csv', index=False)
 df.to_csv('Preproc/temp/preproc_player.csv', index=False)
 order_data.to_csv('Preproc/temp/preproc_orders.csv', index=False)
