@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 print("## Generating Basic Session Plots")
 
 INPUT_DIR = 'Analysis/input'
-TEMP_DIR = 'Analysis/temp'
+IMG_DIR = 'Analysis/temp/img'
 
 
 group_data = pd.read_csv(f'{INPUT_DIR}/group.csv')
@@ -45,7 +45,7 @@ def plot_session(session, price, volume, shares, figsize=SESSION_FIG_SIZE):
  
     plt.suptitle(f"{session.label}   (N = {session.n})"  , fontsize=22)
 
-    plt.savefig(f'{TEMP_DIR}/market_graph_{session.name}png', transparent=False)
+    plt.savefig(f'{IMG_DIR}/market_graph_{session.name}png', transparent=False)
     plt.close()
      
     

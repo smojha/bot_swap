@@ -13,7 +13,7 @@ from SessionPlotter import SessionPlotter, SessionPlotModifier
 
 
 INPUT_DIR = 'Analysis/input'
-TEMP_DIR = 'Analysis/temp'
+IMG_DIR = 'Analysis/temp/img'
 
 
 group_data = pd.read_csv(f'{INPUT_DIR}/group.csv')
@@ -59,4 +59,4 @@ def title_for_session(sess):
 #Plot Sessions
 sp = SessionPlotter(group_data, mod_cb=fmod_for_session, title_cb=title_for_session)
 sp.plot_sessions()
-sp.save_figures(TEMP_DIR, 'forecast')
+sp.save_figures(IMG_DIR, 'forecast')

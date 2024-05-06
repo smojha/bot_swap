@@ -7,7 +7,15 @@ echo "###"
 
 # ensure that the temp and output directories exist and are empty
 [ -d Analysis/temp ] || mkdir Analysis/temp
-rm -f Analysis/temp/*
+rm -rf Analysis/temp/*
+
+[ -d Analysis/temp/img ] || mkdir Analysis/temp/img
+rm -f Analysis/temp/img/*
+
+[ -d Analysis/temp/tex ] || mkdir Analysis/temp/tex
+rm -f Analysis/temp/tex/*
+
+
 [ -d Analysis/output ] || mkdir Analysis/output
 rm -f Analysis/output/*
 
@@ -21,6 +29,7 @@ cp Preproc/output/* Analysis/input/
 # run the prepoc code
 python Analysis/code/market_charts.py
 python Analysis/code/forecast_plots.py
+python Analysis/code/indiv_orders.py
 
 
 # copy files to output
