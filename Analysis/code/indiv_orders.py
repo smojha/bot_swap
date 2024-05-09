@@ -54,3 +54,34 @@ for s in sess:
         fig.savefig(f'{IMG_DIR}/participant_orders_{s}_{u}')
         
         plt.close()
+        
+# sess_data = pd.read_csv(f'{INPUT_DIR}/session.csv').set_index('session')
+       
+# _ord = order_data.set_index(['session', 'round'])
+# _grp = group_data.set_index(['session', 'round'])
+# for s in sess:
+#     o = _ord.loc[s]
+#     buys = o[o['type'] == 'BUY']
+#     sells = o[o['type'] == 'SELL']
+    
+#     buy_tot = buys.groupby('round').quantity.sum()
+#     sell_tot = sells.groupby('round').quantity.sum()
+    
+#     fig, ax = plt.subplots()
+    
+#     buy_tot.plot(ax=ax, label="BUY")
+#     sell_tot.plot(ax=ax, label="SELL")
+    
+#     g = _grp.loc[s].price.plot(ax=ax, label="Market Price")
+    
+#     ax.legend()
+    
+#     d = sess_data.loc[s].label
+#     ax.set_title(f"{s} - {d}")
+    
+#     fig.savefig(f'{IMG_DIR}/demand_supply_{s}')
+#     plt.close()
+    
+    
+    
+    

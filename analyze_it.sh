@@ -30,8 +30,9 @@ cp Preproc/output/* Analysis/input/
 python Analysis/code/market_charts.py
 python Analysis/code/forecast_plots.py
 python Analysis/code/indiv_orders.py
+python Analysis/code/demographic_table.py
 
 
 # copy files to output
-
+cp -R Analysis/temp/* Analysis/output
 #rm -f temp/*

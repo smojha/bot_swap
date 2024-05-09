@@ -64,10 +64,10 @@ def get_part_stats(p):
                  ('forecast_bonus', 'Forecast Bonus'),
                  ('risk_bonus', 'Risk Bonus'),
                  ('total_bonus', 'Total Bonus'),
-                 ('rist_gen_pre', 'Risk Gen (pre)'),
+                 ('risk_gen_pre', 'Risk Gen (pre)'),
                  ('risk_gen_post', 'Risk Gen (post)'),
-                 ('invest_100_pre', 'Risk Finance (pre)'),
-                 ('invest_100_post', 'Risk Finance (post)'),
+                 ('invest_100_pre', 'Invest 100 (pre)'),
+                 ('invest_100_post', 'Invest 100 (post)'),
                  ]
     
     _all = format(p.shape[0], 'd')
@@ -104,3 +104,6 @@ for sess, row in sess_data.iterrows():
 
 
     
+
+
+What race do you consider yourself ? Write here:

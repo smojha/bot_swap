@@ -78,7 +78,7 @@ def rename_columns(df):
      'Do you own/trade stocks? ': 'own_stock',
      'Imagine you performed the tasks with another 99 persons. In terms of performance, on what place do you think you placed? How would you rate your outcome from 1-100?': 'self_place',
      'How would you rate your risk-taking behavior in general, on a scale from 1-7._post': 'risk_gen_post',
-     'How would you rate your financial risk-taking behavior, on a scale from 1-7._post': 'rist_gen_pre',
+     'How would you rate your financial risk-taking behavior, on a scale from 1-7._post': 'risk_gen_pre',
      'You have been given $100. You can invest any part of this money in a risky asset. If the investment is successful, the risky asset returns 2.5 times the amount invested with a probability of one-half and nothing with a probability of one-half. You can also choose not to invest at all, in which case you will keep the money you have. How much would you like to invest? (write amount in dollars)_post': 'invest_100_post',
      'Choose what you prefer:': 'hl_01',
      'Choose what you prefer:.1': 'hl_02',
