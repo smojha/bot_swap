@@ -35,3 +35,7 @@ do
 done
 #rm -f temp/*
 
+
+[ -d Preproc/data_preproc ] || mkdir Preproc/data_preproc
+rm -f data_preproc/*
+cp Preproc/output/* data_preproc
