@@ -20,6 +20,7 @@ with open(f'{TEMPLATE_DIR}/session_summary_template.tex', 'r') as f:
 
 for s in sessions:
     parts_for_sess = part_data.loc[s].drop_duplicates('part_label')
+    parts_for_sess['lab_esc'] = parts_for_sess.part_label.str.replace('_', '\_')
     
     parts_dict = parts_for_sess.set_index('part_label').to_dict(orient='index')
     
