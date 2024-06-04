@@ -72,8 +72,8 @@ def get_part_stats(p, mean_vars):
 
     
     _all = format(p.shape[0], 'd')
-    lab = format(p[p.index.str.len() < 10].shape[0], 'd')
-    prolific = format(p[p.index.str.len() >= 10].shape[0], 'd')
+    lab = format(p[p.site == 'Lab'].shape[0], 'd')
+    prolific = format(p[p.site=='Prolific'].shape[0], 'd')
 
     n = pd.DataFrame([[_all, lab, prolific]], columns=['All', 'Lab', 'Prolific'])
     n.index = pd.MultiIndex.from_tuples([('N', ' ')])    
