@@ -35,14 +35,20 @@ echo "###"
 #Generate PDF
 if  type "pdflatex" &> /dev/null;
 then
+    echo "## Presenting stats for individual sessions"
     python Presentation/code/session_summary.py
 
     base='session_summary_'
     for FILE in Presentation/temp/$base*
     do
+        echo $FILE
         (cd Presentation/temp; pdflatex --halt-on-error $(basename $FILE) > pdflatex.out)
     done    
-        
+    
+    
+    echo "## Presening all session stats"
+    cp Presentation/template/session_summary_all.tex Presentation/temp
+    (cd Presentation/temp; pdflatex --halt-on-error session_summary_all.tex > sess_summary_all.out)
 
 else
     echo "Skipping PDF.  Please install pdflatex"

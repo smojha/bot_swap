@@ -1,5 +1,7 @@
 import pandas as pd
 
+print ("## Generating Session Stats")
+
 INPUT_DIR = "Analysis/input"
 TEX_DIR = "Analysis/temp/tex"
 
@@ -26,8 +28,8 @@ def get_sess_stats(r):
 
 def get_count_stat(p, col, name, fmat='d'):
     
-    lab = p[p.index.str.len() < 10]
-    prolific = p[p.index.str.len() >= 10]
+    lab = p[p.site == 'Lab']
+    prolific = p[p.site=='Prolific']
 
     c_all = p.groupby(col).age.count()
     c_all.name='All'
@@ -45,20 +47,15 @@ def get_count_stat(p, col, name, fmat='d'):
 
 def get_mean_stat(p, col, name, fmat='.2f'):
     _all = format(p[col].mean(), fmat)
-    lab = format(p[p.index.str.len() < 10][col].mean(), fmat)
-    prolific = format(p[p.index.str.len() >= 10][col].mean(), fmat)
+    lab = format(p[p.site == 'Lab'][col].mean(), fmat)
+    prolific = format(p[p.site=='Prolific'][col].mean(), fmat)
 
     df = pd.DataFrame([[_all, lab, prolific]], columns=['All', 'Lab', 'Prolific'])
     df.index = pd.MultiIndex.from_tuples([(name, '(mean)')])    
     
     return df
   
-        
-
-
-def get_part_stats(p):
-    
-    mean_vars = [('age', 'Age'),
+MEAN_VARS = [('age', 'Age'),
                  ('quiz_grade', 'Quiz Grade'),
                  ('market_bonus', 'Market Bonus'),
                  ('forecast_bonus', 'Forecast Bonus'),
@@ -68,11 +65,15 @@ def get_part_stats(p):
                  ('risk_gen_post', 'Risk Gen (post)'),
                  ('invest_100_pre', 'Invest 100 (pre)'),
                  ('invest_100_post', 'Invest 100 (post)'),
-                 ]
+                 ]       
+
+
+def get_part_stats(p, mean_vars):
+
     
     _all = format(p.shape[0], 'd')
-    lab = format(p[p.index.str.len() < 10].shape[0], 'd')
-    prolific = format(p[p.index.str.len() >= 10].shape[0], 'd')
+    lab = format(p[p.site == 'Lab'].shape[0], 'd')
+    prolific = format(p[p.site=='Prolific'].shape[0], 'd')
 
     n = pd.DataFrame([[_all, lab, prolific]], columns=['All', 'Lab', 'Prolific'])
     n.index = pd.MultiIndex.from_tuples([('N', ' ')])    
@@ -99,7 +100,7 @@ for sess, row in sess_data.iterrows():
     
     # Participant Stats
     parts = part_data.loc[sess]
-    p_stats = get_part_stats(parts)
+    p_stats = get_part_stats(parts, MEAN_VARS)
     p_stats.to_latex(f'{TEX_DIR}/stats_part_{sess}.tex')
 
 
@@ -107,3 +108,24 @@ for sess, row in sess_data.iterrows():
 
 
 #What race do you consider yourself ? Write here:
+    
+    
+#Create stats table for all
+MEAN_VARS_FULL_QUIZ = [('age', 'Age'),
+                 ('quiz_grade', 'Quiz Grade'),
+                 ('quiz_1_init_score', 'Quiz 1'),
+                 ('quiz_2_init_score', 'Quiz 2'),
+                 ('quiz_3_init_score', 'Quiz 3'),
+                 ('quiz_4_init_score', 'Quiz 4'),
+                 ('quiz_5_init_score', 'Quiz 5'),
+                 ('market_bonus', 'Market Bonus'),
+                 ('forecast_bonus', 'Forecast Bonus'),
+                 ('risk_bonus', 'Risk Bonus'),
+                 ('total_bonus', 'Total Bonus'),
+                 ('risk_gen_pre', 'Risk Gen (pre)'),
+                 ('risk_gen_post', 'Risk Gen (post)'),
+                 ('invest_100_pre', 'Invest 100 (pre)'),
+                 ('invest_100_post', 'Invest 100 (post)'),
+                 ]       
+all_stats = get_part_stats(part_data.reset_index(level=0, drop=True), MEAN_VARS_FULL_QUIZ)
+all_stats.to_latex(f'{TEX_DIR}/stats_part_all.tex')
