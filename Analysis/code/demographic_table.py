@@ -28,8 +28,8 @@ def get_sess_stats(r):
 
 def get_count_stat(p, col, name, fmat='d'):
     
-    lab = p[p.index.str.len() < 10]
-    prolific = p[p.index.str.len() >= 10]
+    lab = p[p.site == 'Lab']
+    prolific = p[p.site=='Prolific']
 
     c_all = p.groupby(col).age.count()
     c_all.name='All'
@@ -47,8 +47,8 @@ def get_count_stat(p, col, name, fmat='d'):
 
 def get_mean_stat(p, col, name, fmat='.2f'):
     _all = format(p[col].mean(), fmat)
-    lab = format(p[p.index.str.len() < 10][col].mean(), fmat)
-    prolific = format(p[p.index.str.len() >= 10][col].mean(), fmat)
+    lab = format(p[p.site == 'Lab'][col].mean(), fmat)
+    prolific = format(p[p.site=='Prolific'][col].mean(), fmat)
 
     df = pd.DataFrame([[_all, lab, prolific]], columns=['All', 'Lab', 'Prolific'])
     df.index = pd.MultiIndex.from_tuples([(name, '(mean)')])    
