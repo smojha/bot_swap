@@ -134,3 +134,43 @@ def get_asset_allocation(round_data, market_price_array):
         allocation_list.append(allocation)
     return allocation_list
 
+def organize_dataorder_data(order_data, market_price_array, risk_adjusted_score, order_book_pressure, allocation_list):
+    round_ml_data = {
+    'price': [],
+    'volume': [],
+    'lag_price': [],
+    'lag_volume': [],
+    'price_change': [],
+    'period-1 forecast error': [],
+    'period-3 forecast error': [],
+    'period-6 forecast error': [],
+    'period-11 forecast error': [],
+    'laged_risk_parameter_mv_avg': [],
+    'rounds_remaining': [],
+    'order_book_pressure': [],
+    'asset_allocation': []
+}
+
+    # Populate the lists with values for each round
+    for round in np.unique(order_data['round_number']):
+        if round > 3:
+            round_ml_data['price'].append(market_price_array[round-1][0])
+            round_ml_data['volume'].append(market_price_array[round-1][0])
+            if round == 4:
+                round_ml_data['price_change'].append(market_price_array[round-1][0] - 14)
+                round_ml_data['lag_price'].append(14)
+                round_ml_data['lag_volume'].append(None)
+                round_ml_data[f'laged_risk_parameter_mv_avg'].append(None)
+            else:
+                round_ml_data['price_change'].append(market_price_array[round-1][0] - market_price_array[round-2][0])
+                round_ml_data['lag_price'].append(market_price_array[round-2][0])
+                round_ml_data['lag_volume'].append(market_price_array[round-2][0])
+                round_ml_data[f'laged_risk_parameter_mv_avg'].append(risk_adjusted_score[round - 3 - 2]) # -3 since it doesn't include practice, -1 since round index starts at 1, -1 for lagged
+            round_ml_data['rounds_remaining'].append(33 - round)
+            round_ml_data['order_book_pressure'].append(order_book_pressure[round-1])
+            round_ml_data['asset_allocation'].append(allocation_list[round-1])
+
+    for m in [1,3,6,11]:
+        round_ml_data[f'period-{m} forecast error'] = generate_forecast_error(round_data, market_price_array[3:], m)
+    round_ml_data_df = pd.DataFrame.from_dict(round_ml_data)
+    return round_ml_data_df
