@@ -4,74 +4,62 @@ import matplotlib.pyplot as plt
 import glob
 from sklearn.svm import LinearSVC
 
-def get_negative_inflection(buy_orders, sell_orders, session, hide_graph = "no"):
-    buy_sell_diff = []
-    for round,ask_count in enumerate(sell_orders):
-        bid_count = buy_orders[round]
-        if (ask_count > bid_count) and not (sell_orders[round-1] > buy_orders[round-1]):
-            buy_sell_diff.append(1)
+def basic_price_data(order_data):
+    sell_orders = []
+    min_sell_price = []
+    buy_orders = []
+    max_buy_price = []
+    market_price = []
+    volume = []
+    for round in np.unique(order_data['round_number']):
+        df = order_data[order_data['round_number']== round]
+        sell_orders.append(np.sum(df[df['type'] == 'SELL']['quantity']))
+        min_sell_price.append(np.min(df[df['type'] == 'SELL']['price']))
+        buy_orders.append(np.sum(df[df['type'] == 'BUY']['quantity']))
+        max_buy_price.append(np.max(df[df['type'] == 'BUY']['price']))
+        market_price.append(np.unique(df['market_price']))
+        volume.append(np.unique(df['volume']))
+
+
+    #turning into numpy arrays cause its nice
+    sell_orders_array = np.array(sell_orders)
+    min_sell_price_array = np.array(min_sell_price)
+    buy_orders_array = np.array(buy_orders)
+    max_buy_price_array = np.array(max_buy_price)
+    market_price_array = np.array(market_price)
+    volume_array = np.array(volume)
+    return sell_orders_array, min_sell_price_array, buy_orders_array, max_buy_price_array,market_price_array, volume_array
+
+def get_round_risk_adjusted(round_data):
+    risk_adjusted_score=[]
+    for i in np.unique(round_data['subsession.round_number']):
+        if i <= 3:
+            risk_adjusted_score.append(None)
         else:
-            buy_sell_diff.append(0)
-    np.array(buy_sell_diff)
+            r1 = round_data[round_data['subsession.round_number'] == i]
+            risk_adjusted_score.append(np.mean(r1["player.dose_r"]))
+    return risk_adjusted_score
+risk_adjusted_score = get_round_risk_adjusted(round_data)
 
-    if hide_graph == "yes":
-        plt.plot(buy_sell_diff)
-        plt.title(f"{session} Bid_Ask Change")
-    
-    return buy_sell_diff
-
-def price_change(idx, market_price_array):
-    if idx == 0:
-        prev = 0
-    else:
-        prev = market_price_array[idx-1]
-    return market_price_array[idx] - prev
-
-def get_lag_price(market_price_array, hide_graph = "no"):
-    lag_price = []
-    for round,price in enumerate(market_price_array):
-        lag_price.append(price_change(round, market_price_array))
-    
-    if hide_graph == "yes":
-        plt.plot(lag_price)
-        plt.hlines(0, xmin=0, xmax=len(lag_price)-1, colors='r', linestyles='dashed')
-        plt.xlabel('Round')
-        plt.ylabel('Price Change')
-        plt.title('Lagged Price Changes')
-        plt.show()
-    return lag_price
-
-
-def period_mv_avg(idx, market_price_array, period, include_beg="no"):
-    if idx < period:
-        if include_beg == 'yes':
-            mv_avg = np.mean(market_price_array[:idx])
-        else:
-            mv_avg = 14
-    else:
-        mv_avg = np.mean(market_price_array[idx-period:idx])
-
-    return mv_avg
-
-def get_moving_average(market_price_array, period, include_beg="no",hide_graph = 'no'):
-    if include_beg == 'yes':
-        print(f""" Note: You are including in the moving average periods that do not have {period} rounds of previous data. 
-        The means for those periods will be a simple average of the periods up until this point from index 0. 
-        If you want to exclude then the include_beg parameter should be set to no.""")
-    
+def get_risk_adj_mv_avg(round_data, m):
+    risk_adjusted_score = get_round_risk_adjusted(round_data)
     mv_avg = []
-    lag_price = get_lag_price(market_price_array)
-    for round, price in enumerate(market_price_array):
-        mv_avg.append(period_mv_avg(round, market_price_array, 3, include_beg= include_beg))
-    if hide_graph == "yes":
-        plt.plot(mv_avg)
-        plt.hlines(14, xmin=0, xmax=len(lag_price)-1, colors='r', linestyles='dashed')
-        plt.xlabel('Round')
-        plt.ylabel("Price")
-        plt.title(f'{period} Price moving averge')
-        plt.show()
-    return lag_price
-
+    for idx, score in enumerate(risk_adjusted_score):
+        if idx < 3: # makes sure not in practice
+            continue
+        else:
+            scores = []
+            if idx - m < 3: # if moving average would go into practice then cut avg short
+                if idx - 3 == 0: #fixes 0 case
+                    scores.append(risk_adjusted_score[idx])
+                else:
+                    for i in range(idx - 3):
+                        scores.append(risk_adjusted_score[idx - i])
+            else:
+                for i in range(idx - m):
+                    scores.append(risk_adjusted_score[idx - i])
+            mv_avg.append(np.mean(scores))
+    return mv_avg
 
 def get_forecast_data(round_data):
     f1mean_forecast=[]
@@ -79,12 +67,11 @@ def get_forecast_data(round_data):
     f3mean_forecast=[]
     f4mean_forecast=[]
     for i in np.unique(round_data['subsession.round_number']):
-        if i > 3:
-            r1 = round_data[round_data['subsession.round_number'] == i]
-            f1mean_forecast.append(np.mean(r1['player.f0']))
-            f2mean_forecast.append(np.mean(r1['player.f1']))
-            f3mean_forecast.append(np.mean(r1['player.f2']))
-            f4mean_forecast.append(np.mean(r1['player.f3']))
+        r1 = round_data[round_data['subsession.round_number'] == i]
+        f1mean_forecast.append(np.mean(r1['player.f0']))
+        f2mean_forecast.append(np.mean(r1['player.f1']))
+        f3mean_forecast.append(np.mean(r1['player.f2']))
+        f4mean_forecast.append(np.mean(r1['player.f3']))
     return [f1mean_forecast, f2mean_forecast, f3mean_forecast, f4mean_forecast]
 
 def forecast_error(round_data,market_price_array, t, m):
@@ -99,7 +86,7 @@ def forecast_error(round_data,market_price_array, t, m):
         forecast_array = forecasts[3]
 
     forecast_error = forecast_array[t-m] - market_price_array[t]
-    return forecast_error
+    return forecast_error[0]
 
 def generate_forecast_error(round_data, market_price_array, m):
     forecast_error_array = []
@@ -110,14 +97,6 @@ def generate_forecast_error(round_data, market_price_array, m):
             error = forecast_error(round_data, market_price_array, t, m)
         forecast_error_array.append(error)
     return forecast_error_array
-
-def lag_volume(buy_orders, sell_orders, t):
-    volume = np.add(buy_orders, sell_orders)
-    if t < 1:
-        lag_volume = None
-    else:
-        lag_volume= volume[t-1]
-    return lag_volume
 
 def get_orderbook_pressure_per_round(order_data, t):
     round_data = order_data[order_data['round_number']== t]
@@ -134,11 +113,24 @@ def get_orderbook_pressure_per_round(order_data, t):
     obook_pressure = (max_unfilled_bid * bid_quantity + min_unfilled_ask * ask_quantity)/(bid_quantity+ask_quantity)
     return obook_pressure
 
-def get_asset_allocation(round_data, t):
-    if t < 1:
-        price = 14
-    else:
-        price = np.unique(round_data[round_data['subsession.round_number']== 4]['group.price'])[0]
-    player_cash = np.sum(round_data[round_data['subsession.round_number']== t]['player.cash'])
-    stock_value = np.sum(round_data['player.shares'])* price
-    return player_cash/stock_value
+def get_order_book_ressure(order_data ):
+    order_book_pressure = []
+    for round in np.unique(order_data['round_number']):
+        order_book_pressure.append(get_orderbook_pressure_per_round(order_data, round))
+    return (order_book_pressure)
+
+def get_asset_allocation(round_data, market_price_array):
+    allocation_list = []
+    for i in np.unique(round_data['subsession.round_number']):
+        r1 = round_data[round_data['subsession.round_number'] == i]
+        cash = np.sum(r1['player.cash'])
+        shares = np.sum(r1['player.shares'])
+        if i == 4:
+            price = 14
+        else:
+            price = market_price_array[i-2] # -1 since idx starts at 1, -1 for lag
+        market_cap = shares * price
+        allocation = cash.item() / market_cap.item()
+        allocation_list.append(allocation)
+    return allocation_list
+
