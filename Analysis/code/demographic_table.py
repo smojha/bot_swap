@@ -9,6 +9,11 @@ part_data = pd.read_csv(f"{INPUT_DIR}/participant.csv")
 sess_data = pd.read_csv(f"{INPUT_DIR}/session.csv").set_index('session')
 part_data = pd.read_csv(f"{INPUT_DIR}/participant.csv").set_index(['session', 'part_label'])
 
+#Clean up Race Variable
+WHAT = 'What race do you consider yourself? Write here:'
+part_data.loc[part_data.race==WHAT, 'race'] = 'Other'
+part_data.loc[part_data.race.isna(), 'race'] = 'Prefer Not to Say'
+
 
 def get_sess_stats(r):
     df = r[['n', 'flt', 'rad', 'bias', 'disp', 'pa', 'dur', 'peak_price', 'peak_round']]
@@ -56,15 +61,15 @@ def get_mean_stat(p, col, name, fmat='.2f'):
     return df
   
 MEAN_VARS = [('age', 'Age'),
-                 ('quiz_grade', 'Quiz Grade'),
-                 ('market_bonus', 'Market Bonus'),
-                 ('forecast_bonus', 'Forecast Bonus'),
-                 ('risk_bonus', 'Risk Bonus'),
-                 ('total_bonus', 'Total Bonus'),
-                 ('risk_gen_pre', 'Risk Gen (pre)'),
-                 ('risk_gen_post', 'Risk Gen (post)'),
-                 ('invest_100_pre', 'Invest 100 (pre)'),
-                 ('invest_100_post', 'Invest 100 (post)'),
+                  ('quiz_grade', 'Quiz Grade'),
+                  ('market_bonus', 'Market Bonus'),
+                  ('forecast_bonus', 'Forecast Bonus'),
+                  ('risk_bonus', 'Risk Bonus'),
+                  ('total_bonus', 'Total Bonus'),
+                  ('risk_gen_pre', 'Risk Gen (pre)'),
+                  ('risk_gen_post', 'Risk Gen (post)'),
+                  ('invest_100_pre', 'Invest 100 (pre)'),
+                  ('invest_100_post', 'Invest 100 (post)'),
                  ]       
 
 
@@ -86,7 +91,8 @@ def get_part_stats(p, mean_vars):
     df = pd.concat(rows)
     
     race_count = get_count_stat(p, 'race', 'Race')
-    df = pd.concat([df, race_count])
+    gender_count = get_count_stat(p, 'gender', "Gender")
+    df = pd.concat([df, race_count, gender_count])
 
     return df.fillna(0)
     
@@ -112,20 +118,22 @@ for sess, row in sess_data.iterrows():
     
 #Create stats table for all
 MEAN_VARS_FULL_QUIZ = [('age', 'Age'),
-                 ('quiz_grade', 'Quiz Grade'),
-                 ('quiz_1_init_score', 'Quiz 1'),
-                 ('quiz_2_init_score', 'Quiz 2'),
-                 ('quiz_3_init_score', 'Quiz 3'),
-                 ('quiz_4_init_score', 'Quiz 4'),
-                 ('quiz_5_init_score', 'Quiz 5'),
-                 ('market_bonus', 'Market Bonus'),
-                 ('forecast_bonus', 'Forecast Bonus'),
-                 ('risk_bonus', 'Risk Bonus'),
+                  ('quiz_grade', 'Quiz Grade'),
+                  ('quiz_1_init_score', 'Quiz 1'),
+                  ('quiz_2_init_score', 'Quiz 2'),
+                  ('quiz_3_init_score', 'Quiz 3'),
+                  ('quiz_4_init_score', 'Quiz 4'),
+                  ('quiz_5_init_score', 'Quiz 5'),
+                  ('market_bonus', 'Market Bonus'),
+                  ('forecast_bonus', 'Forecast Bonus'),
+                  ('risk_bonus', 'Risk Bonus'),
                  ('total_bonus', 'Total Bonus'),
-                 ('risk_gen_pre', 'Risk Gen (pre)'),
-                 ('risk_gen_post', 'Risk Gen (post)'),
-                 ('invest_100_pre', 'Invest 100 (pre)'),
-                 ('invest_100_post', 'Invest 100 (post)'),
+                  ('risk_gen_pre', 'Risk Gen (pre)'),
+                  ('risk_gen_post', 'Risk Gen (post)'),
+                  ('invest_100_pre', 'Invest 100 (pre)'),
+                  ('invest_100_post', 'Invest 100 (post)'),
                  ]       
 all_stats = get_part_stats(part_data.reset_index(level=0, drop=True), MEAN_VARS_FULL_QUIZ)
-all_stats.to_latex(f'{TEX_DIR}/stats_part_all.tex')
+all_stats.style\
+    .format('{:.0f}', subset=pd.IndexSlice[['Race', 'Gender'], ['All', 'Lab', 'Prolific']])\
+    .to_latex(f'{TEX_DIR}/stats_part_all.tex', hrules=True, multirow_align='t')

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 print("## Generating Basic Session Plots")
 
-INPUT_DIR = '/Users/thenning/Documents/GitHub/neurobubbles/data_preproc'
+INPUT_DIR = 'Analysis/input'
 IMG_DIR = 'Analysis/temp/img'
 
 
