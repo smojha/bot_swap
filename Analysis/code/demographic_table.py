@@ -62,6 +62,11 @@ def get_mean_stat(p, col, name, fmat='.2f'):
   
 MEAN_VARS = [('age', 'Age'),
                   ('quiz_grade', 'Quiz Grade'),
+                  ('quiz_1_init_score', 'Quiz 1'),
+                  ('quiz_2_init_score', 'Quiz 2'),
+                  ('quiz_3_init_score', 'Quiz 3'),
+                  ('quiz_4_init_score', 'Quiz 4'),
+                  ('quiz_5_init_score', 'Quiz 5'),
                   ('market_bonus', 'Market Bonus'),
                   ('forecast_bonus', 'Forecast Bonus'),
                   ('risk_bonus', 'Risk Bonus'),

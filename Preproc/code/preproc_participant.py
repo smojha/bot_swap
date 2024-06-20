@@ -40,7 +40,10 @@ part_final = part_with_survey.join(landing_data, on='part_label')
 ################
 def grade_column(df, column, answer, fill=0):
     score_col = f"{column}_score"
-    df[score_col] = (df[column] == answer).astype(int)
+    if type(answer) == list:
+        df[score_col] = (df[column].isin(answer)).astype(int)
+    else:
+        df[score_col] = (df[column] == answer).astype(int)
     df.loc[df[column].isna(), score_col] = fill
     df[score_col] = df[score_col].astype(int)
 
@@ -50,7 +53,7 @@ grade_column(part_final, 'quiz_1_init', 2)
 grade_column(part_final, 'quiz_2_init', 2)
 grade_column(part_final, 'quiz_3_init', 210)
 grade_column(part_final, 'quiz_4_init', 110)
-grade_column(part_final, 'quiz_5_init', 56)
+grade_column(part_final, 'quiz_5_init', [56, 14])
 quiz_score_cols = ['quiz_1_init_score', 'quiz_2_init_score', 'quiz_3_init_score', 'quiz_4_init_score', 'quiz_5_init_score']
 part_final['quiz_grade'] = part_final[quiz_score_cols].sum(axis=1)
 quiz_cols = ['quiz_1_init', 'quiz_2_init', 'quiz_3_init', 'quiz_4_init', 'quiz_5_init']
