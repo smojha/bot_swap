@@ -39,7 +39,7 @@ def get_round_risk_adjusted(round_data):
             r1 = round_data[round_data['subsession.round_number'] == i]
             risk_adjusted_score.append(np.mean(r1["player.dose_r"]))
     return risk_adjusted_score
-risk_adjusted_score = get_round_risk_adjusted(round_data)
+#risk_adjusted_score = get_round_risk_adjusted(round_data)
 
 def get_risk_adj_mv_avg(round_data, m):
     risk_adjusted_score = get_round_risk_adjusted(round_data)
@@ -149,7 +149,7 @@ def organize_dataorder_data(order_data, market_price_array, risk_adjusted_score,
     'rounds_remaining': [],
     'order_book_pressure': [],
     'asset_allocation': []
-}
+    }
 
     # Populate the lists with values for each round
     for round in np.unique(order_data['round_number']):
