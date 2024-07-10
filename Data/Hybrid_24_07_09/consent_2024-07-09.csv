@@ -1,0 +1,26 @@
+﻿participant.id_in_session,participant.code,participant.label,participant._is_bot,participant._index_in_pages,participant._max_page_index,participant._current_app_name,participant._current_page_name,participant.time_started_utc,participant.visited,participant.mturk_worker_id,participant.mturk_assignment_id,participant.payoff,player.id_in_group,player.role,player.payoff,player.consent_given,player.button_clicked,group.id_in_subsession,subsession.round_number,session.code,session.label,session.mturk_HITId,session.mturk_HITGroupId,session.comment,session.is_demo
+1,9oeq07qk,5700616b8a49c7000d0c73ad,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:41.931660,1,,,729.09,1,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+2,somj9puo,5885f97f41da4500014d3645,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:41.916877,1,,,1141.0,2,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+3,tipxu5rn,kfzc0i99_59A,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:42.159917,1,,,1163.61,3,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+4,q292dlg8,5c9623dd35599200175642e4,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:43.712176,1,,,667.39,4,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+5,m9t3mjpx,666e02576e916cd782e9ae12,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:44.064008,1,,,1242.99,5,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+6,qvstletj,kfzc0i99_82W,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:43.903530,1,,,787.8,6,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+7,mogy0jjj,66429bad9e92786ee8928856,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:44.777671,1,,,1203.81,7,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+8,zxalivxa,kfzc0i99_50M,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:44.822069,1,,,1080.31,8,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+9,sdtf4ez6,65412ca42e0e2fbb27b8a7b2,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:44.936692,1,,,1535.02,9,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+10,nzqb1hvz,5bf0b1ecaf38d100016bd609,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:45.106900,1,,,965.78,10,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+11,43rol51x,kfzc0i99_02E,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:45.746177,1,,,1173.34,11,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+12,4v7iwnmj,667b252c7a8e4a841804560d,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:46.300993,1,,,1004.71,12,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+13,9myb6b3u,66491e9882aaa64c5d0911d5,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:46.341692,1,,,875.71,13,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+14,imvrfxus,61115178c8a4bbd5832f32ba,0,367,368,payment,FinalResultsPage,2024-07-09 20:32:47.610390,1,,,1069.77,14,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+15,peblpes1,667b5427190429e5c81518f2,0,368,368,payment,NonParticipantPage,2024-07-09 20:32:59.112296,1,,,0.0,15,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+16,w5gqsid8,663c18b624172c32a8dbb066,0,367,368,payment,FinalResultsPage,2024-07-09 20:33:03.008557,1,,,880.63,16,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+17,5ee2gslk,6595e3b4dc9090390e4edb5f,0,367,368,payment,FinalResultsPage,2024-07-09 20:33:05.572912,1,,,1113.83,17,,0.0,1,1,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+18,ltm7qbf1,898aphuw_33G,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:08.865126,1,,,0.0,18,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+19,kywso24r,898aphuw_30T,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:08.885068,1,,,0.0,19,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+20,n7qznlxi,898aphuw_98O,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:08.903781,1,,,0.0,20,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+21,zz2gu6js,898aphuw_15U,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:08.922242,1,,,0.0,21,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+22,hvzsupki,898aphuw_24Q,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:08.940615,1,,,0.0,22,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+23,886q3x0k,898aphuw_16N,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:08.974612,1,,,0.0,23,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+24,ybc8fymw,898aphuw_60C,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:09.008574,1,,,0.0,24,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
+25,cvfpfos2,898aphuw_30A,0,368,368,payment,NonParticipantPage,2024-07-09 20:33:09.042801,1,,,0.0,25,,0.0,0,0,1,1,898aphuw,2024-07-09,,,Market Experiment,0
