@@ -5,7 +5,6 @@ print ("## Generating Session Stats")
 INPUT_DIR = "Analysis/input"
 TEX_DIR = "Analysis/temp/tex"
 
-part_data = pd.read_csv(f"{INPUT_DIR}/participant.csv")
 sess_data = pd.read_csv(f"{INPUT_DIR}/session.csv").set_index('session')
 part_data = pd.read_csv(f"{INPUT_DIR}/participant.csv").set_index(['session', 'part_label'])
 
