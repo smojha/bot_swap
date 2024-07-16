@@ -107,7 +107,8 @@ peaks.name = 'peak_price'
 
 def get_peak_round(df):
     idx = df.set_index('round').price.argmax()
-    return df['round'].iloc[idx]
+    return df['round'].iloc[idx] -3  #subtract off the practice rounds
+
 max_round = group_data.groupby('session').apply(get_peak_round)
 max_round.name = 'peak_round'
 
