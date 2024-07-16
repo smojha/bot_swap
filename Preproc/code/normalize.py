@@ -6,6 +6,25 @@ from pathlib import Path
 DATA_DIR = 'Data'
 TEMP_DIR = 'Preproc/temp'
 
+DUPLICATES = [
+    ('56f9364e895094000c8f4967', 'txyy1leq'),
+    ('5f7529755aaa0e1a6e804640', 'nhrerg4w'),
+    ('651c4484ba17050f6b716614', '19jfynhh'),
+    ('65a2bc0d60b1e46f4e1d3cc8', 'txyy1leq'),
+    ('62cd43d66c2dd7ae9ab53ae7', '19jfynhh'),
+    ('56f9364e895094000c8f4967', 'r0fz6tf4'),
+    ('5f7529755aaa0e1a6e804640', 'ao7syclg'),
+    ('6267c3d17f88988d0d787c7f', 'r46wgr8m'),
+    ('62cd43d66c2dd7ae9ab53ae7', 'r46wgr8m'),
+    ('651c4484ba17050f6b716614', 'r46wgr8m'),
+    ('65a2bc0d60b1e46f4e1d3cc8', 'r0fz6tf4'),
+]
+
+def flag_duplicates(df):
+    for pid, sess in DUPLICATES:
+        df.loc[(df.part_label == pid) & (df.session == sess), 'part_label'] = f'{pid}_dup'
+
+
 def get_df(base):
     paths =  Path(DATA_DIR).rglob(f'Hybrid*/{base}*.csv')
     dfs =  [pd.read_csv(p) for p in paths]
@@ -49,6 +68,7 @@ rounds_data = get_df('rounds')
 
 rounds_data = remove_non_part(rounds_data)
 rounds_data.rename(mapper=common_map, axis=1, inplace=True)
+flag_duplicates(rounds_data)
 #rounds_data.drop(, axis=1, inplace=True)
 
 # Participant Data
@@ -85,17 +105,20 @@ orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
 #%%
 print("... Payment")
 payment_data = get_df('payment')
+flag_duplicates(payment_data)
 
 
 print("... Page Times")
 page_time_data = get_df('PageTimes')
 page_time_data.rename({'session_code': 'session'}, axis=1, inplace=True)
+#flag_duplicates(page_time_data)
 
 ##
 # Landing Data - Contains the quiz
 ##
 landing_data = get_df('landingct')
 landing_data.rename(mapper=common_map, axis=1, inplace=True)
+flag_duplicates(landing_data)
 landing_data = get_variables('player', landing_data, include_participant=True)
 
 ###############

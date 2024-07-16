@@ -4,6 +4,21 @@ DATA_DIR = 'Data'
 TEMP_DIR = 'preproc/temp'
 
 
+DUPLICATES = [
+             ('62cd43d66c2dd7ae9ab53ae7', '2024-07-03'),
+             ('651c4484ba17050f6b716614', '2024-07-03'),
+             ('5f7529755aaa0e1a6e804640', '2024-07-08'),
+             ('65a2bc0d60b1e46f4e1d3cc8', '2024-07-02'),
+             ('56f9364e895094000c8f4967', '2024-07-02'),
+             ]
+
+
+def flag_duplicates(df):
+    df['d'] = pd.to_datetime(df.Timestamp.str.replace('AST', ''), format='%Y/%m/%d %I:%M:%S %p ').dt.strftime('%Y-%m-%d')
+    for pid, d in DUPLICATES:
+        df.loc[(df.part_label == pid) & (df.d == d), 'part_label'] = f'{pid}_dup'
+
+
 def join_surveys():
     print("# Joining Surveys")
     #
@@ -27,11 +42,17 @@ def join_surveys():
     pre_2.rename(mapper=f, axis=1, inplace=True)
     post.rename(mapper=f, axis=1, inplace=True)
     
+    #flag duplicates
+    flag_duplicates(pre_1)
+    flag_duplicates(pre_2)
+    flag_duplicates(post)
+    
+    
     #
     #  Somehow, we are getting duplicate submissions.  Remove the duplicates
-    pre_1.drop_duplicates(subset='part_label', inplace=True)
-    pre_2.drop_duplicates(subset='part_label', inplace=True)
-    post.drop_duplicates(subset='part_label', inplace=True)
+    pre_1 = pre_1.groupby('part_label').apply(lambda x: x[x.Timestamp == x.Timestamp.max()])
+    pre_2 = pre_2.groupby('part_label').apply(lambda x: x[x.Timestamp == x.Timestamp.max()])
+    post = post.groupby('part_label').apply(lambda x: x[x.Timestamp == x.Timestamp.max()])
 
     
     pre_1 = pre_1.set_index('part_label')
