@@ -1,7 +1,11 @@
 import pandas as pd
+import glob
 
 DATA_DIR = 'Data'
 TEMP_DIR = 'preproc/temp'
+PRE_1_BASE_NAME = 'Neurofinance 1st pre-experiment.csv'
+PRE_2_BASE_NAME = 'Neurofinance 2nd pre-experiment.csv'
+POST_BASE_NAME = 'Neurofinance post-experiment.csv'
 
 
 DUPLICATES = [
@@ -17,15 +21,19 @@ def flag_duplicates(df):
     df['d'] = pd.to_datetime(df.Timestamp.str.replace('AST', ''), format='%Y/%m/%d %I:%M:%S %p ').dt.strftime('%Y-%m-%d')
     for pid, d in DUPLICATES:
         df.loc[(df.part_label == pid) & (df.d == d), 'part_label'] = f'{pid}_dup'
+        
+def get_df(base_name):
+    f = glob.glob(f"{DATA_DIR}/Surveys/{base_name}*")[0]
+    return pd.read_csv(f)    
 
 
 def join_surveys():
     print("# Joining Surveys")
     #
     #  Load the survey data
-    pre_1 = pd.read_csv(f"{DATA_DIR}/Surveys/Neurofinance 1st pre-experiment.csv")
-    pre_2 = pd.read_csv(f"{DATA_DIR}/Surveys/Neurofinance 2nd pre-experiment.csv")
-    post = pd.read_csv(f"{DATA_DIR}/Surveys/Neurofinance post-experiment.csv")
+    pre_1 = get_df(PRE_1_BASE_NAME)
+    pre_2 = get_df(PRE_2_BASE_NAME)
+    post = get_df(POST_BASE_NAME)
     
     #
     # For now, these seem to be the columns for the participant labels, for now
