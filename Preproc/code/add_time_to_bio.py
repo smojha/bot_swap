@@ -52,6 +52,20 @@ def add_time(df, colname):
     return data
 
 
+def add_time_ibi(df):
+    epoch = float(df.columns[0])
+    dt = datetime.datetime.fromtimestamp(epoch, tz=EAST_COAST_TZ)
+    get_ts = lambda x: dt + datetime.timedelta(seconds=x)
+    time_col = df.iloc[:, 0].apply(get_ts)
+    time_col.name = 'time'
+    
+    ibi = df.iloc[:, 1]
+    ibi.name='IBI'
+    return pd.concat([time_col, ibi], axis=1)    
+    
+    
+
+
 def process_participant(part_dir):
     id = os.path.basename(part_dir)
 
@@ -85,7 +99,11 @@ def process_participant(part_dir):
             print(f"EmptyDataError - {part_dir} - {file_name}")
             return
 
-        w_time = add_time(df, file_name)
+        if file_name == 'IBI':
+            w_time = add_time_ibi(df)    
+        else:
+            w_time = add_time(df, file_name)
+        
         w_time.to_csv(f"{BIO_TEMP_DIR}/{id}/{file_name}.csv")
 
 
