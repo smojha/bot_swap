@@ -19,26 +19,33 @@ dirs = [f for f in glob.glob(f"{BIO_SOURCE_DIR}/Hybrid_*/*") if len(os.path.base
 
 DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
 EAST_COAST_TZ = pytz.timezone('America/New_York')
+ONE_MILLION = 1000000
 
 #Make output dir
 Path(BIO_TEMP_DIR).mkdir(parents=True, exist_ok=True)
 
 
 
-def add_time(df, colname, delta = datetime.timedelta(microseconds=250000)):
+def add_time(df, colname):
+
+    #pull out special information (Timestamp, and frequency)
+    epoch = float(df.columns[0])
+    freq = df.iloc[0,0]
+    data = df.iloc[1:, :]
+    
 
     #generate time column
-    epoch = float(df.columns[0])
+    delta = datetime.timedelta(microseconds=ONE_MILLION/freq)
     dt = datetime.datetime.fromtimestamp(epoch, tz=EAST_COAST_TZ)
-    time_col = pd.date_range(start=dt, periods=df.shape[0], freq=delta)#.to_series().reset_index(drop=True)
+    time_col = pd.date_range(start=dt, periods=data.shape[0], freq=delta)#.to_series().reset_index(drop=True)
     time_col.name = 'time'
 
     #rename data column
     if colname == 'ACC':
-        data = df.copy()
-        data.columns = ['ACC_x', 'ACC_y', 'ACC_z']
+        data2 = df.copy()
+        data2.columns = ['ACC_x', 'ACC_y', 'ACC_z']
     else:
-        data = df.rename(mapper=lambda x: colname, axis='columns')
+        data2 = df.rename(mapper=lambda x: colname, axis='columns')
     
     data.set_index(time_col, inplace=True)
     
