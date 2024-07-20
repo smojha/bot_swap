@@ -66,7 +66,7 @@ part_final['took_quiz'] = (~missing_all).astype(int)
 ####
 # TODO:   Remove this and place the payouts in the experiment sensibly.
 print("\t...Joining Payouts")
-cols=['clicked_button', 'market_bonus', 'forecast_bonus', 'risk_bonus', 'total_bonus', 'showup', 'total_payment']
+cols=['clicked_button', 'market_bonus', 'forecast_bonus', 'risk_bonus', 'quiz_bonus', 'total_bonus', 'showup', 'total_payment']
 part_final = part_final.join(payment_data[cols], on='part_label')
 
 # Lab participants earn a payout of 20
