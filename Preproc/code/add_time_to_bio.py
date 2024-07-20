@@ -25,13 +25,16 @@ ONE_MILLION = 1000000
 Path(BIO_TEMP_DIR).mkdir(parents=True, exist_ok=True)
 
 
-
+# Add time column.
+# Most data are formatted as the column names are the start time as number of seconds since the epoch
+# The second row contains the frequency of the data
+# the rest of the rows are the measurements.
 def add_time(df, colname):
 
     #pull out special information (Timestamp, and frequency)
     epoch = float(df.columns[0])
     freq = df.iloc[0,0]
-    data = df.iloc[1:, :]
+    data = df.iloc[1:, :]  # the actual data are located from the second row
     
 
     #generate time column
@@ -42,31 +45,35 @@ def add_time(df, colname):
 
     #rename data column
     if colname == 'ACC':
-        data2 = df.copy()
-        data2.columns = ['ACC_x', 'ACC_y', 'ACC_z']
+        data.columns = ['ACC_x', 'ACC_y', 'ACC_z']
     else:
-        data2 = df.rename(mapper=lambda x: colname, axis='columns')
+        data = data.rename(mapper=lambda x: colname, axis='columns')
     
     data.set_index(time_col, inplace=True)
     
-    return data
+    return data.reset_index()
 
 
+# IBI is a special case
+# The first column's name is the epoch timestamp
+# the data in that column are number of seconds elapsed since that time.
 def add_time_ibi(df):
     epoch = float(df.columns[0])
-    dt = datetime.datetime.fromtimestamp(epoch, tz=EAST_COAST_TZ)
-    get_ts = lambda x: dt + datetime.timedelta(seconds=x)
-    time_col = df.iloc[:, 0].apply(get_ts)
+    dt = datetime.datetime.fromtimestamp(epoch, tz=EAST_COAST_TZ)  # start time
+    get_ts = lambda x: dt + datetime.timedelta(seconds=x)   # value given in the number of seconds elapsed since the start time.
+    time_col = df.iloc[:, 0].apply(get_ts) # generate timestamps
     time_col.name = 'time'
     
-    ibi = df.iloc[:, 1]
-    ibi.name='IBI'
+    ibi = df.iloc[:, 1]  #sometimes this column's name has an extra space in it.  that can throw off indexing
+    ibi.name='IBI'   # this ensures a clean column name
     return pd.concat([time_col, ibi], axis=1)    
     
     
 
-
+# For each participant....
+# given a path to a participant's bio data
 def process_participant(part_dir):
+    # the participant id is the directory name
     id = os.path.basename(part_dir)
 
     # find session
@@ -75,6 +82,7 @@ def process_participant(part_dir):
     sess = sess_data.loc[date_of_session].session # use the label to get the session code.
 
     # Check if the participant is using a new for old empatica
+    # In the old E4 data files, the EDA file is a single column
     try:
         eda = pd.read_csv(part_dir+"/EDA.csv")
         if len(list(eda)) != 1:
@@ -86,12 +94,14 @@ def process_participant(part_dir):
         return
 
 
+    # Ensure that the output directory exists
     Path(f"{BIO_TEMP_DIR}/{id}").mkdir(parents=True, exist_ok=True)
 
     # Open files and add timestamps
     for file_name in DATA_FILE_NAMES:
         try:
             df = pd.read_csv(f"{part_dir}/{file_name}.csv")
+        
         except FileNotFoundError:
             print(f"Missing file in dir: {part_dir} - {file_name}")
             return
@@ -99,15 +109,16 @@ def process_participant(part_dir):
             print(f"EmptyDataError - {part_dir} - {file_name}")
             return
 
+        # Special case for IBI
         if file_name == 'IBI':
             w_time = add_time_ibi(df)    
         else:
             w_time = add_time(df, file_name)
         
-        w_time.to_csv(f"{BIO_TEMP_DIR}/{id}/{file_name}.csv")
+        w_time.to_csv(f"{BIO_TEMP_DIR}/{id}/{file_name}.csv", index=False)
 
 
-
+# Mulitprocessing stuff
 def task(_iq):
     for args in iter(_iq.get, 'STOP'):
         process_participant(*args)
