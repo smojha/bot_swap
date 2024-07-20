@@ -111,7 +111,9 @@ flag_duplicates(payment_data)
 print("... Page Times")
 page_time_data = get_df('PageTimes')
 page_time_data.rename({'session_code': 'session'}, axis=1, inplace=True)
-#flag_duplicates(page_time_data)
+part_labels_by_code = part_data.set_index('participant').part_label
+page_time_data = page_time_data.join(part_labels_by_code, on='participant_code')
+flag_duplicates(page_time_data)
 
 ##
 # Landing Data - Contains the quiz
