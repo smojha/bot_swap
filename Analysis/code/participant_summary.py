@@ -32,10 +32,10 @@ race_pivot['Unlisted'] = race_pivot.get('What race do you consider yourself? Wri
 race = race_pivot[['American Indian or Alaska Native', 'Asian or Asian Indian', 'Black or African American', 'White caucasian', 'Unlisted']].reset_index()
 
 # payment
-payment = df.groupby(['site', 'date'])['total_payment'].agg(['mean', 'std']).reset_index()
+paymentraw = df.groupby(['site', 'date'])['total_payment'].agg(['mean', 'std']).reset_index()
 payment_pivot = payment.pivot_table(index='date', columns='site', values=['mean', 'std'], fill_value=0)
 payment_pivot.columns = [f'{stat.capitalize()} Payment {site}' for stat, site in payment_pivot.columns]
-payment_pivot = payment_pivot.reset_index()
+payment = payment_pivot.reset_index()
 
 # merge
 merged = (site
@@ -46,5 +46,5 @@ merged = (site
     .sort_values(by='date'))
 
 # display
-print(merged)
-merged.to_csv(f'{OUTPUT_DIR}/participants_summary.csv', index=False)
+# print(merged)
+merged.to_csv(f'{OUTPUT_DIR}/participant_summary.csv', index=False)
