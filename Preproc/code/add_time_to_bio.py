@@ -1,4 +1,3 @@
-
 import pandas as pd
 import glob
 import os
@@ -13,8 +12,28 @@ BIO_TEMP_DIR = 'Preproc/temp/bio'
 TEMP_DIR = 'Preproc/temp'
 BIO_SOURCE_DIR = 'Data/EDA_data'
 
-
 sess_data = pd.read_csv(f"{TEMP_DIR}/preproc_session.csv").set_index('label')
+part_data = pd.read_csv(f"{TEMP_DIR}/preproc_participant.csv")
+pt_data = pd.read_csv(f"{TEMP_DIR}/preproc_page_time.csv")
+
+# check for duplicate participant ids
+part_data = part_data[part_data.site == 'Lab']  # lose the prolific participants
+# shorten the participant labels to 3 characters to match the bio directories
+part_data['plab_short'] = part_data.part_label.str[-3:] 
+# Check for duplicate ids
+c = part_data.groupby('plab_short').session.count()
+dups =  c[c>1]
+# Alert if there are duplicates detected
+if dups.shape[0] > 0:
+    print("Found duplicate ids")
+    print(dups)
+    
+# Reduce the pagee time data to in-lab participants and add a shorteded part_label
+pt_data = pt_data.set_index('part_label').loc[part_data.part_label]
+pt_data = pt_data.join(part_data.set_index('part_label').plab_short)
+pt_data['tse'] = pt_data.tse.apply(datetime.datetime.strptime, args=['%Y-%m-%d %H:%M:%S%z'])
+
+
 dirs = [f for f in glob.glob(f"{BIO_SOURCE_DIR}/Hybrid_*/*") if len(os.path.basename(f)) == 3]
 
 DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
@@ -68,6 +87,40 @@ def add_time_ibi(df):
     ibi.name='IBI'   # this ensures a clean column name
     return pd.concat([time_col, ibi], axis=1)    
     
+
+    
+## Match timestamps on the bio markers to page times
+def add_page_names(df, pid):
+    # Page Times for participant
+    page_times = pt_data[pt_data.plab_short == pid].sort_values('tse')
+    
+    target_time = page_times.iloc[0].tse  # bio marker time will be compared to this time
+    last_page_time = page_times.iloc[-1].tse
+    
+    #don't concern ourselves with biometric data that runs after the end of the experiment
+    bio_time_during_experiment = df[df.time < last_page_time] 
+    
+    page_time_index = 0
+    working_page = 'landing'  # prior to the experiment in the landing page this the starting point
+    working_round = -1
+
+    pages = [''] * df.shape[0]
+    rounds= [-1] * df.shape[0]
+    
+    for idx, t in enumerate(bio_time_during_experiment.time):
+        if t >= target_time:
+            working_page = page_times.iloc[page_time_index].page_name
+            working_round = page_times.iloc[page_time_index]['round']
+            page_time_index += 1
+                        
+            target_time = page_times.iloc[page_time_index].tse
+            
+        pages[idx] = working_page
+        rounds[idx] = working_round
+      
+    df['page'] =  pages
+    df['rnd'] = rounds
+    return df
     
 
 # For each participant....
@@ -75,6 +128,12 @@ def add_time_ibi(df):
 def process_participant(part_dir):
     # the participant id is the directory name
     id = os.path.basename(part_dir)
+    
+    #some bio folders refer to non-existent ids, skip them
+    if part_data[part_data.plab_short == id].shape[0] == 0:
+        print(f"Id in bio data not in experiment data: {id}")
+        return
+    part_label = part_data[part_data.plab_short == id].part_label.values[0]
 
     # find session
     parent_dir = os.path.basename(os.path.dirname(part_dir)) # the parent directory name contains the session date
@@ -95,7 +154,7 @@ def process_participant(part_dir):
 
 
     # Ensure that the output directory exists
-    Path(f"{BIO_TEMP_DIR}/{id}").mkdir(parents=True, exist_ok=True)
+    Path(f"{BIO_TEMP_DIR}/{part_label}").mkdir(parents=True, exist_ok=True)
 
     # Open files and add timestamps
     for file_name in DATA_FILE_NAMES:
@@ -114,8 +173,10 @@ def process_participant(part_dir):
             w_time = add_time_ibi(df)    
         else:
             w_time = add_time(df, file_name)
+            
+        w_page_names = add_page_names(w_time, id)
         
-        w_time.to_csv(f"{BIO_TEMP_DIR}/{id}/{file_name}.csv", index=False)
+        w_time.to_csv(f"{BIO_TEMP_DIR}/{part_label}/{file_name}.csv", index=False)
 
 
 # Mulitprocessing stuff
@@ -144,4 +205,4 @@ if __name__ == '__main__':
 
     
 
-    
+# process_participant(dirs[4])
