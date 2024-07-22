@@ -4,6 +4,6 @@
 **/.DS_Store
 */.DS_Store
 **/__pycache__
-notebooks
+personal_notebooks
 .ipynb_checkpoints
 .virtual_documents
