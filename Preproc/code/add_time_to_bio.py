@@ -178,6 +178,8 @@ def task(_iq):
 
 if __name__ == '__main__':
     #set_start_method('fork')
+    
+    print("###\n###\n### Adding Timestamps and Page Label to Biometric Data")
 
     m = Manager()
     iq = m.Queue()

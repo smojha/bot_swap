@@ -12,6 +12,12 @@ rm -f Preproc/temp/*
 [ -d Preproc/temp/payments ] || mkdir Preproc/temp/payments
 rm -f Preproc/temp/payments/*
 
+[ -d Preproc/temp/bio ] || mkdir Preproc/temp/bio
+rm -f Preproc/temp/bio/*
+
+[ -d Preproc/temp/bio/panels ] || mkdir Preproc/temp/bio/panels
+rm -f Preproc/temp/bio/panels/*
+
 [ -d Preproc/output ] || mkdir Preproc/output
 rm -f Preproc/output/*
 
@@ -27,6 +33,10 @@ python Preproc/code/preproc_player_group_orders.py
 python Preproc/code/preproc_participant.py
 python Preproc/code/preproc_page_time.py
 
+# Biometric Preprocessing
+python Preproc/code/add_time_to_bio.py
+python Preproc/code/create_bio_panels.py
+
 python Preproc/code/generate_prolific_bonus_payment_files.py
 
 
@@ -39,6 +49,7 @@ do
   cp $FILE Preproc/output/$output_name
 done
 cp -R Preproc/temp/payments Preproc/output/
+cp -R Preproc/temp/bio/panels Preproc/output
 #rm -f temp/*
 
 
