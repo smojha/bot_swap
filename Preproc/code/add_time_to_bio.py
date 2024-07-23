@@ -31,7 +31,7 @@ if dups.shape[0] > 0:
 # Reduce the pagee time data to in-lab participants and add a shorteded part_label
 pt_data = pt_data.set_index('part_label').loc[part_data.part_label]
 pt_data = pt_data.join(part_data.set_index('part_label').plab_short)
-pt_data['tse'] = pt_data.tse.apply(datetime.datetime.strptime, args=['%Y-%m-%d %H:%M:%S%z'])
+pt_data['tse'] = pt_data.tse.apply(pd.Timestamp)
 
 
 dirs = [f for f in glob.glob(f"{BIO_SOURCE_DIR}/Hybrid_*/*") if len(os.path.basename(f)) == 3]
@@ -59,7 +59,7 @@ def add_time(df, colname):
     #generate time column
     delta = datetime.timedelta(microseconds=ONE_MILLION/freq)
     dt = datetime.datetime.fromtimestamp(epoch, tz=EAST_COAST_TZ)
-    time_col = pd.date_range(start=dt, periods=data.shape[0], freq=delta)#.to_series().reset_index(drop=True)
+    time_col = pd.date_range(start=dt, periods=data.shape[0], freq=delta)
     time_col.name = 'time'
 
     #rename data column
@@ -93,34 +93,25 @@ def add_time_ibi(df):
 def add_page_names(df, pid):
     # Page Times for participant
     page_times = pt_data[pt_data.plab_short == pid].sort_values('tse')
-    
-    target_time = page_times.iloc[0].tse  # bio marker time will be compared to this time
-    last_page_time = page_times.iloc[-1].tse
-    
-    #don't concern ourselves with biometric data that runs after the end of the experiment
-    bio_time_during_experiment = df[df.time < last_page_time] 
-    
-    page_time_index = 0
-    working_page = 'landing'  # prior to the experiment in the landing page this the starting point
-    working_round = -1
 
-    pages = [''] * df.shape[0]
-    rounds= [-1] * df.shape[0]
+    df['page'] = ' '
+    df['rnd'] = -99
+
     
-    for idx, t in enumerate(bio_time_during_experiment.time):
-        if t >= target_time:
-            working_page = page_times.iloc[page_time_index].page_name
-            working_round = page_times.iloc[page_time_index]['round']
-            page_time_index += 1
-                        
-            target_time = page_times.iloc[page_time_index].tse
-            
-        pages[idx] = working_page
-        rounds[idx] = working_round
-      
-    df['page'] =  pages
-    df['rnd'] = rounds
-    return df
+    start_time = page_times.tse.iloc[0]
+    
+    # fill in landing page stuff
+    df.loc[df.time < start_time, 'page'] = 'landing'
+    
+    for _, row in page_times.iloc[1:].iterrows():
+        end_time = row.tse
+        df.loc[(df.time > start_time) & (df.time <= end_time), 'page'] = row.page_name
+        df.loc[(df.time > start_time) & (df.time <= end_time), 'rnd'] = row['round']
+        
+        start_time = row.tse
+        
+    return df  
+
     
 
 # For each participant....
@@ -205,4 +196,4 @@ if __name__ == '__main__':
 
     
 
-# process_participant(dirs[4])
+#process_participant(dirs[10])
