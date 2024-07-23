@@ -8,7 +8,7 @@ import pytz
 import datetime
 
 
-BIO_TEMP_DIR = 'Preproc/temp/bio'
+BIO_TEMP_DIR = 'Preproc/temp/bio/page_merge'
 TEMP_DIR = 'Preproc/temp'
 BIO_SOURCE_DIR = 'Data/EDA_data'
 
@@ -97,7 +97,6 @@ def add_page_names(df, pid):
     df['page'] = ' '
     df['rnd'] = -99
 
-    
     start_time = page_times.tse.iloc[0]
     
     # fill in landing page stuff
@@ -110,7 +109,7 @@ def add_page_names(df, pid):
         
         start_time = row.tse
         
-    return df  
+    return df[df.rnd != -99]  # ignore data that occurrs after the experiment
 
     
 
@@ -167,7 +166,7 @@ def process_participant(part_dir):
             
         w_page_names = add_page_names(w_time, id)
         
-        w_time.to_csv(f"{BIO_TEMP_DIR}/{part_label}/{file_name}.csv", index=False)
+        w_page_names.to_csv(f"{BIO_TEMP_DIR}/{part_label}/{file_name}.csv", index=False)
 
 
 # Mulitprocessing stuff
@@ -196,4 +195,4 @@ if __name__ == '__main__':
 
     
 
-#process_participant(dirs[10])
+# process_participant(dirs[10])
