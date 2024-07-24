@@ -38,7 +38,7 @@ python Preproc/code/add_time_to_bio.py
 python Preproc/code/create_bio_panels.py
 
 python Preproc/code/generate_prolific_bonus_payment_files.py
-
+python Preproc/code/flatten_data.py
 
 # copy files to output
 base='preproc_'

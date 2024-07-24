@@ -26,6 +26,19 @@ print("\t... Determine short selling and buybacks for counterfactuals")
 ## is margin violation
 player_data['is_mv'] = player_data['periods_until_auto_buy'] != -99
 
+#remove extraneous columns
+player_cols = list(player_data)
+for c in ['id_in_group', 'dr', 'dmu', 'forecast_error', 'forecast_reward', 'forecast_bonus_data', ]:
+    player_cols.remove(c)
+player_data = player_data[player_cols]
+
+group_cols = list(group_data)
+for c in ['short', ]:
+    group_cols.remove(c)
+group_data = group_data[group_cols]
+
+
+
 
 # Generate a UID column for all orders
 # this by resetting the index.  So far the index is just the integer row numbers
@@ -93,10 +106,6 @@ df['equity'] = df.shares * df.market_price + df.cash
 
 
 # Player - peak round diff
-peak_rnd_df = df.join(sess_data.peak_round, on='session')
-pk_rnd_diff = peak_rnd_df['round'] - peak_rnd_df.peak_round
-pk_rnd_diff.name = 'pk_rnd_diff'
-df['pk_rnd_diff'] = pk_rnd_diff
 
 #%%
 # Write all out to the temp directory
