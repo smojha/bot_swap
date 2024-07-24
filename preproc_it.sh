@@ -50,9 +50,10 @@ do
 done
 cp -R Preproc/temp/payments Preproc/output/
 cp -R Preproc/temp/bio/panels Preproc/output
+cp Preproc/temp/flattened_data* Preproc/output
 #rm -f temp/*
 
 
 [ -d Preproc/data_preproc ] || mkdir Preproc/data_preproc
-rm -f data_preproc/*
+rm -fR data_preproc/*
 cp -R Preproc/output/* data_preproc
