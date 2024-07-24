@@ -147,13 +147,21 @@ def remove_unneeded(df):
     ret = df.drop(drop, axis='columns')
     return ret
 
+def remove_new_lines(df, col):
+    c = df[col].fillna(' ').str.replace("\n", ' ')
+    df[col] = c
+    return df
+
 
 if __name__ == '__main__':
     all = join_surveys()
     all = rename_columns(all)
     all = remove_unneeded(all)
     all = fix_number_cols(all)
-    
+        
+    all = remove_new_lines(all, 'strategy')
+    all = remove_new_lines(all, 'improve')
+
     #
     # Write out the results
     all.to_csv(f"{TEMP_DIR}/temp_surveys.csv")

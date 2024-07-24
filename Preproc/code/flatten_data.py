@@ -53,4 +53,5 @@ flat_w_bio = flat_w_bio.reset_index().sort_values(['label', 'part_label', 'page'
 
 #write to disk
 flat.to_csv(f"{TEMP_DIR}/flattened_data.csv")
-flat_w_bio.to_csv(f"{TEMP_DIR}/flattened_data_w_bio.csv")
+flat_w_bio.to_csv(f"{TEMP_DIR}/flattened_data_w_bio.csv", index=False)
+
