@@ -29,7 +29,7 @@ player_data['is_mv'] = player_data['periods_until_auto_buy'] != -99
 
 #remove extraneous columns
 player_cols = list(player_data)
-for c in ['id_in_group', 'dr', 'dmu', 'forecast_error', 'forecast_reward', 'forecast_bonus_data', ]:
+for c in ['id_in_group', 'dr', 'dmu', 'forecast_error', 'forecast_reward', 'forecast_bonus_data', 'risk']:
     player_cols.remove(c)
 player_data = player_data[player_cols]
 
@@ -116,5 +116,5 @@ df['equity'] = df.shares * df.market_price + df.cash
 # Write all out to the temp directory
 print("\t... Write to disk")
 group_data.to_csv('Preproc/temp/preproc_group.csv', index=False)
-df.to_csv('Preproc/temp/preproc_player.csv', index=False)
+df.to_csv('Preproc/temp/intermed_player.csv', index=False)  #player data
 order_data.to_csv('Preproc/temp/preproc_orders.csv', index=False)
