@@ -81,8 +81,7 @@ prev_price = group_data.groupby('session').price.shift(1)
 # Insert the lagged price into the data frame immediately after the market price.
 group_data.insert(3, 'prev_price', prev_price)
 
-lr = np.log(group_data.price / group_data.prev_price)
-group_data.insert(4, 'log_returns', lr)
+
 
 # Group - Peak round diff
 peak_rnd_df = group_data.join(sess_data.peak_round, on='session')
@@ -97,8 +96,10 @@ start_price = start_price.fillna(14)  # this should be round one price, set to t
 
 # Returns
 print("\t... Calculating Returns")
-group_data['rnd_returns'] = (group_data.price - group_data.prev_price) / group_data.prev_price
-
+pct_r = (group_data.price - group_data.prev_price) / group_data.prev_price
+group_data.insert(4, 'pct_returns', pct_r)
+lr = np.log(group_data.price / group_data.prev_price)
+group_data.insert(5, 'log_returns', lr)
 
 # Join that previous price (now "market_price") into the working player data.
 df = p_with_sell_q.join(start_price, on=['session', 'round'])
