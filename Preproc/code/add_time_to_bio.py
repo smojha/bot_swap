@@ -11,37 +11,71 @@ import datetime
 BIO_TEMP_DIR = 'Preproc/temp/bio/page_merge'
 TEMP_DIR = 'Preproc/temp'
 BIO_SOURCE_DIR = 'Data/EDA_data'
-
-sess_data = pd.read_csv(f"{TEMP_DIR}/preproc_session.csv").set_index('label')
-part_data = pd.read_csv(f"{TEMP_DIR}/preproc_participant.csv")
-pt_data = pd.read_csv(f"{TEMP_DIR}/preproc_page_time.csv")
-
-# check for duplicate participant ids
-part_data = part_data[part_data.site == 'Lab']  # lose the prolific participants
-# shorten the participant labels to 3 characters to match the bio directories
-part_data['plab_short'] = part_data.part_label.str[-3:] 
-# Check for duplicate ids
-c = part_data.groupby('plab_short').session.count()
-dups =  c[c>1]
-# Alert if there are duplicates detected
-if dups.shape[0] > 0:
-    print("Found duplicate ids")
-    print(dups)
-    
-# Reduce the pagee time data to in-lab participants and add a shorteded part_label
-pt_data = pt_data.set_index('part_label').loc[part_data.part_label]
-pt_data = pt_data.join(part_data.set_index('part_label').plab_short)
-pt_data['tse'] = pt_data.tse.apply(pd.Timestamp)
-
-
-dirs = [f for f in glob.glob(f"{BIO_SOURCE_DIR}/Hybrid_*/*") if len(os.path.basename(f)) == 3]
-
 DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
 EAST_COAST_TZ = pytz.timezone('America/New_York')
 ONE_MILLION = 1000000
 
-#Make output dir
-Path(BIO_TEMP_DIR).mkdir(parents=True, exist_ok=True)
+def get_part_label_for_dir(part_dir, part_data):
+    # the participant id is the directory name
+    id = os.path.basename(part_dir)
+    
+    #some bio folders refer to non-existent ids, skip them
+    if part_data[part_data.plab_short == id].shape[0] == 0:
+        print(f"Id in bio data not in experiment data: {id}")
+        return
+    part_label = part_data[part_data.plab_short == id].part_label.values[0]
+
+
+    # find session
+    #parent_dir = os.path.basename(os.path.dirname(part_dir)) # the parent directory name contains the session date
+    #date_of_session = "20" + parent_dir[-8:].replace("_", "-") # turn parent directory name into label stored in session data
+    #sess = sess_data.loc[date_of_session].session # use the label to get the session code.  
+    
+    return part_label
+
+
+def set_up():
+    #sess_data = pd.read_csv(f"{TEMP_DIR}/preproc_session.csv").set_index('label')
+    part_data = pd.read_csv(f"{TEMP_DIR}/preproc_participant.csv")
+    pt_data = pd.read_csv(f"{TEMP_DIR}/preproc_page_time.csv")
+
+    # check for duplicate participant ids
+    part_data = part_data[part_data.site == 'Lab']  # lose the prolific participants
+    # shorten the participant labels to 3 characters to match the bio directories
+    part_data['plab_short'] = part_data.part_label.str[-3:] 
+    # Check for duplicate ids
+    c = part_data.groupby('plab_short').session.count()
+    dups =  c[c>1]
+    # Alert if there are duplicates detected
+    if dups.shape[0] > 0:
+        print("Found duplicate ids")
+        print(dups)
+        
+    # Reduce the pagee time data to in-lab participants and add a shorteded part_label
+    pt_data = pt_data.set_index('part_label').loc[part_data.part_label]
+    pt_data = pt_data.join(part_data.set_index('part_label').plab_short)
+    pt_data['tse'] = pt_data.tse.apply(pd.Timestamp)
+    
+    
+    dirs = [f for f in glob.glob(f"{BIO_SOURCE_DIR}/Hybrid_*/*") if len(os.path.basename(f)) == 3]
+    args = [(d, get_part_label_for_dir(d, part_data)) for d in dirs]
+    
+    # Skip participants that already exist in the BIO_TEMP_DIR folder
+    args_to_keep = []
+    for part_dir, part_label in args:
+            
+        #Test if the directory exists already
+        if os.path.exists(f"{BIO_TEMP_DIR}/{part_label}"):
+            print(f"Folder exists - {part_label}.   Skipping")
+        
+        else:
+            args_to_keep.append((part_dir, part_label))
+    
+    
+    #Make output dir
+    Path(BIO_TEMP_DIR).mkdir(parents=True, exist_ok=True)
+    
+    return args_to_keep, pt_data
 
 
 # Add time column.
@@ -90,9 +124,13 @@ def add_time_ibi(df):
 
     
 ## Match timestamps on the bio markers to page times
-def add_page_names(df, pid):
+def add_page_names(df, pid, pt_data):
     # Page Times for participant
     page_times = pt_data[pt_data.plab_short == pid].sort_values('tse')
+    
+    if page_times.shape[0] == 0:
+        print(f"PageTime data does not contain id: {pid}")
+        return
 
     df['page'] = ' '
     df['rnd'] = -99
@@ -115,20 +153,10 @@ def add_page_names(df, pid):
 
 # For each participant....
 # given a path to a participant's bio data
-def process_participant(part_dir):
+def process_participant(part_dir, part_label, pt_data):
     # the participant id is the directory name
     id = os.path.basename(part_dir)
-    
-    #some bio folders refer to non-existent ids, skip them
-    if part_data[part_data.plab_short == id].shape[0] == 0:
-        print(f"Id in bio data not in experiment data: {id}")
-        return
-    part_label = part_data[part_data.plab_short == id].part_label.values[0]
 
-    # find session
-    parent_dir = os.path.basename(os.path.dirname(part_dir)) # the parent directory name contains the session date
-    date_of_session = "20" + parent_dir[-8:].replace("_", "-") # turn parent directory name into label stored in session data
-    sess = sess_data.loc[date_of_session].session # use the label to get the session code.
 
     # Check if the participant is using a new for old empatica
     # In the old E4 data files, the EDA file is a single column
@@ -164,9 +192,10 @@ def process_participant(part_dir):
         else:
             w_time = add_time(df, file_name)
             
-        w_page_names = add_page_names(w_time, id)
+        w_page_names = add_page_names(w_time, id, pt_data)
         
-        w_page_names.to_csv(f"{BIO_TEMP_DIR}/{part_label}/{file_name}.csv", index=False)
+        if w_page_names is not None:
+            w_page_names.to_csv(f"{BIO_TEMP_DIR}/{part_label}/{file_name}.csv", index=False)
 
 
 # Mulitprocessing stuff
@@ -180,6 +209,8 @@ if __name__ == '__main__':
     #set_start_method('fork')
     
     print("###\n###\n### Adding Timestamps and Page Label to Biometric Data")
+    
+    args, pt_data = set_up()
 
     m = Manager()
     iq = m.Queue()
@@ -188,8 +219,8 @@ if __name__ == '__main__':
     
     procs = [Process(target=task, args=[iq]) for _ in range(cpu_count())]
     for p in procs: p.start()
-    for dir in dirs:
-        iq.put([dir])
+    for dir, part_lab in args:
+        iq.put([dir, part_lab, pt_data])
         num_tasks += 1
     for _ in range(cpu_count()):iq.put('STOP')
     for p in procs: p.join()
