@@ -56,7 +56,8 @@ do
 done
 cp -R Preproc/temp/payments Preproc/output/
 cp -R Preproc/temp/bio/panels Preproc/output
-cp Preproc/temp/flattened_data* Preproc/output
+# Flattened data files don't go to github anymore
+# cp Preproc/temp/flattened_data* Preproc/output
 #rm -f temp/*
 
 
