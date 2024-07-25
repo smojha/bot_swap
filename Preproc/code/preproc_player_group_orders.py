@@ -1,5 +1,6 @@
 #%%
 import pandas as pd
+import numpy as np
 
 player_data = pd.read_csv('Preproc/temp/normalized_player.csv')
 order_data = pd.read_csv('Preproc/temp/normalized_orders.csv')
@@ -79,6 +80,9 @@ print("\t... Lagging market prices")
 prev_price = group_data.groupby('session').price.shift(1)
 # Insert the lagged price into the data frame immediately after the market price.
 group_data.insert(3, 'prev_price', prev_price)
+
+lr = np.log(group_data.price / group_data.prev_price)
+group_data.insert(4, 'log_returns', lr)
 
 # Group - Peak round diff
 peak_rnd_df = group_data.join(sess_data.peak_round, on='session')
