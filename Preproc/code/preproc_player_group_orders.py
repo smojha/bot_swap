@@ -29,7 +29,11 @@ player_data['is_mv'] = player_data['periods_until_auto_buy'] != -99
 
 #remove extraneous columns
 player_cols = list(player_data)
-for c in ['id_in_group', 'dr', 'dmu', 'forecast_error', 'forecast_reward', 'forecast_bonus_data', 'risk']:
+player_cols_exclude = ['id_in_group', 'dr', 'dmu', 'forecast_error',
+                       'forecast_reward', 'forecast_bonus_data', 'risk', 
+                       'periods_until_auto_sell', 'periods_until_auto_buy',
+                       'is_mv', ]
+for c in  player_cols_exclude:
     player_cols.remove(c)
 player_data = player_data[player_cols]
 
