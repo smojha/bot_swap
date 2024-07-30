@@ -16,6 +16,7 @@ order_data = pd.read_csv(f'{TEMP_DIR}/preproc_orders.csv')
 landing_data = pd.read_csv(f'{TEMP_DIR}/normalized_landing.csv').set_index('part_label')
 payment_data = pd.read_csv(f'{TEMP_DIR}/normalized_payment.csv').set_index('part_label')
 
+# Keep 'participant'.   We need that to match page time data.
 cols_to_drop = ['_is_bot', '_max_page_index', '_index_in_pages', '_current_page_name', '_current_app_name', 'visited', 'mturk_worker_id', 'mturk_assignment_id']
 
 print("\t...Removing unnecessary columns")
@@ -58,7 +59,6 @@ quiz_score_cols = ['quiz_1_init_score', 'quiz_2_init_score', 'quiz_3_init_score'
 part_final['quiz_grade'] = part_final[quiz_score_cols].sum(axis=1)
 quiz_cols = ['quiz_1_init', 'quiz_2_init', 'quiz_3_init', 'quiz_4_init', 'quiz_5_init']
 missing_all = part_final[quiz_cols].isna().all(axis=1)
-part_final['took_quiz'] = (~missing_all).astype(int)
 
 
 ####
@@ -86,7 +86,10 @@ executed_trades.name = 'executed_trades'
 part_final = part_final.join(executed_trades, on='part_label')
 
 
-
+#drop unnecessary columns
+to_drop = ['id_in_session', 'time_started_utc', 'timeout', 'consent_given',
+           'quiz_1', 'quiz_2', 'quiz_3', 'quiz_4', 'quiz_5','clicked_button']
+part_final.drop(to_drop, axis='columns', inplace=True)
 #%% md
 
 #%%

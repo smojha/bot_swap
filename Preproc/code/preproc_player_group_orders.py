@@ -75,6 +75,8 @@ p_with_sell_q.sell_quant = p_with_sell_q.sell_quant.fillna(0).astype(int)
 p_with_sell_q.buy_quant = p_with_sell_q.buy_quant.fillna(0).astype(int)
 
 
+#####
+#####
 #%%
 # Group Level items
 # Previous Price - Lag of market price
@@ -85,7 +87,7 @@ prev_price = group_data.groupby('session').price.shift(1)
 # Insert the lagged price into the data frame immediately after the market price.
 group_data.insert(3, 'prev_price', prev_price)
 
-
+group_data.drop(['is_practice', 'float'], axis='columns', inplace=True)
 
 # Group - Peak round diff
 peak_rnd_df = group_data.join(sess_data.peak_round, on='session')

@@ -1,19 +1,23 @@
 import pandas as pd
 import glob
 import os
+from scipy.stats import zscore
 from pathlib import Path
 import pandas.io.common
-from multiprocessing import Process, Manager, cpu_count, set_start_method
-import pytz
-import datetime
+from multiprocessing import Process, Manager, cpu_count #, set_start_method
+import sys
+
+if 'Preproc/code' not in sys.path:
+    sys.path.insert(0, 'Preproc/code')
+
+from bio_preproc_funcs import decompose_eda_signal
 
 
 BIO_TEMP_DIR = 'Preproc/temp/bio/page_merge'
 TEMP_DIR = 'Preproc/temp'
 BIO_SOURCE_DIR = 'Data/EDA_data'
 DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
-EAST_COAST_TZ = pytz.timezone('America/New_York')
-ONE_MILLION = 1000000
+OUTLIER_THOLD = 2.5
 
 def get_part_label_for_dir(part_dir, part_data):
     # the participant id is the directory name
@@ -23,6 +27,7 @@ def get_part_label_for_dir(part_dir, part_data):
     if part_data[part_data.plab_short == id].shape[0] == 0:
         print(f"Id in bio data not in experiment data: {id}")
         return
+    
     part_label = part_data[part_data.plab_short == id].part_label.values[0]
 
 
@@ -34,7 +39,14 @@ def get_part_label_for_dir(part_dir, part_data):
     return part_label
 
 
-def set_up():
+def set_up(skip=True):
+
+    # This is to aviod a warning message that comes from huggingface 
+    #(dont' know why since I'm not using it here)    
+    # https://stackoverflow.com/questions/62691279/how-to-disable-tokenizers-parallelism-true-false-warning
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    
     #sess_data = pd.read_csv(f"{TEMP_DIR}/preproc_session.csv").set_index('label')
     part_data = pd.read_csv(f"{TEMP_DIR}/preproc_participant.csv")
     pt_data = pd.read_csv(f"{TEMP_DIR}/preproc_page_time.csv")
@@ -63,9 +75,12 @@ def set_up():
     # Skip participants that already exist in the BIO_TEMP_DIR folder
     args_to_keep = []
     for part_dir, part_label in args:
+        
+        if part_label is None:
+            continue
             
         #Test if the directory exists already
-        if os.path.exists(f"{BIO_TEMP_DIR}/{part_label}"):
+        if os.path.exists(f"{BIO_TEMP_DIR}/{part_label}") and skip:
             print(f"Folder exists - {part_label}.   Skipping")
         
         else:
@@ -87,24 +102,56 @@ def add_time(df, colname):
     #pull out special information (Timestamp, and frequency)
     epoch = float(df.columns[0])
     freq = df.iloc[0,0]
-    data = df.iloc[1:, :]  # the actual data are located from the second row
+    data = df.iloc[1:, :].copy()  # the actual data are located from the second row
     
 
     #generate time column
-    delta = datetime.timedelta(microseconds=ONE_MILLION/freq)
-    dt = datetime.datetime.fromtimestamp(epoch, tz=EAST_COAST_TZ)
-    time_col = pd.date_range(start=dt, periods=data.shape[0], freq=delta)
+    step = 1/freq
+    time_col = pd.Series([epoch + i*step for i in range(data.shape[0])])
     time_col.name = 'time'
+    
 
     #rename data column
     if colname == 'ACC':
-        data.columns = ['ACC_x', 'ACC_y', 'ACC_z']
+        data.columns = ['x', 'y', 'z']
     else:
-        data = data.rename(mapper=lambda x: colname, axis='columns')
+        data.columns = ['value']
+        
+
     
-    data.set_index(time_col, inplace=True)
+    # merge time column and data
+    ret_df = data.set_index(time_col)
     
-    return data.reset_index()
+    # z-score and remove outliers
+    if colname == 'ACC':
+        ret_df['zscore_x'] = zscore(ret_df.x)
+        ret_df['zscore_y'] = zscore(ret_df.y)
+        ret_df['zscore_z'] = zscore(ret_df.z)
+        ret_df = ret_df[(ret_df.zscore_x.abs() < OUTLIER_THOLD) & (ret_df.zscore_y.abs() < OUTLIER_THOLD) & (ret_df.zscore_z.abs() < OUTLIER_THOLD)]
+
+    else:
+        ret_df['zscore'] = zscore(ret_df.value)     
+        ret_df = ret_df[ret_df.zscore.abs() < OUTLIER_THOLD]
+
+
+    # hi / lo pass decomp
+    if colname == 'ACC':
+        tonic, phasic = decompose_eda_signal(ret_df.zscore_x, freq)
+        ret_df['tonic_x'] = tonic
+        ret_df['phasic_x'] = phasic
+        tonic, phasic = decompose_eda_signal(ret_df.zscore_y, freq)
+        ret_df['tonic_y'] = tonic
+        ret_df['phasic_y'] = phasic
+        tonic, phasic = decompose_eda_signal(ret_df.zscore_z, freq)
+        ret_df['tonic_z'] = tonic
+        ret_df['phasic_z'] = phasic
+        
+    else:
+        tonic, phasic = decompose_eda_signal(ret_df.zscore, freq)
+        ret_df['tonic'] = tonic
+        ret_df['phasic'] = phasic
+    
+    return ret_df.reset_index()
 
 
 # IBI is a special case
@@ -112,13 +159,11 @@ def add_time(df, colname):
 # the data in that column are number of seconds elapsed since that time.
 def add_time_ibi(df):
     epoch = float(df.columns[0])
-    dt = datetime.datetime.fromtimestamp(epoch, tz=EAST_COAST_TZ)  # start time
-    get_ts = lambda x: dt + datetime.timedelta(seconds=x)   # value given in the number of seconds elapsed since the start time.
-    time_col = df.iloc[:, 0].apply(get_ts) # generate timestamps
+    time_col = df.iloc[:, 0] + epoch
     time_col.name = 'time'
     
     ibi = df.iloc[:, 1]  #sometimes this column's name has an extra space in it.  that can throw off indexing
-    ibi.name='IBI'   # this ensures a clean column name
+    ibi.name='value'   # this ensures a clean column name
     return pd.concat([time_col, ibi], axis=1)    
     
 
@@ -135,17 +180,17 @@ def add_page_names(df, pid, pt_data):
     df['page'] = ' '
     df['rnd'] = -99
 
-    start_time = page_times.tse.iloc[0]
+    start_time = page_times.epoch_time_completed.iloc[0]
     
     # fill in landing page stuff
     df.loc[df.time < start_time, 'page'] = 'landing'
     
     for _, row in page_times.iloc[1:].iterrows():
-        end_time = row.tse
+        end_time = row.epoch_time_completed
         df.loc[(df.time > start_time) & (df.time <= end_time), 'page'] = row.page_name
         df.loc[(df.time > start_time) & (df.time <= end_time), 'rnd'] = row['round']
         
-        start_time = row.tse
+        start_time = row.epoch_time_completed
         
     return df[df.rnd != -99]  # ignore data that occurrs after the experiment
 
@@ -189,6 +234,7 @@ def process_participant(part_dir, part_label, pt_data):
         # Special case for IBI
         if file_name == 'IBI':
             w_time = add_time_ibi(df)    
+            pass
         else:
             w_time = add_time(df, file_name)
             
@@ -227,5 +273,6 @@ if __name__ == '__main__':
     
 
     
-
-# process_participant(dirs[10])
+# args, pt_data = set_up(skip=False)
+# d, pid  = args[14]
+# process_participant(d, pid, pt_data)

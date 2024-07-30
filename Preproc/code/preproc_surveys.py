@@ -112,7 +112,7 @@ def rename_columns(df):
      'Do you own/trade stocks? ': 'own_stock',
      'Imagine you performed the tasks with another 99 persons. In terms of performance, on what place do you think you placed? How would you rate your outcome from 1-100?': 'self_place',
      'How would you rate your risk-taking behavior in general, on a scale from 1-7._post': 'risk_gen_post',
-     'How would you rate your financial risk-taking behavior, on a scale from 1-7._post': 'risk_gen_pre',
+     'How would you rate your financial risk-taking behavior, on a scale from 1-7._post': 'risk_fin_post',
      'You have been given $100. You can invest any part of this money in a risky asset. If the investment is successful, the risky asset returns 2.5 times the amount invested with a probability of one-half and nothing with a probability of one-half. You can also choose not to invest at all, in which case you will keep the money you have. How much would you like to invest? (write amount in dollars)_post': 'invest_100_post',
      'Choose what you prefer:': 'hl_01',
      'Choose what you prefer:.1': 'hl_02',
@@ -128,15 +128,17 @@ def rename_columns(df):
      'Choose what you prefer:.11': 'hl_12',
      }
     
-    return df.rename(mapper=mapper, axis=1)
+    ret = df.rename(mapper=mapper, axis=1)
+    ret.rename(mapper= lambda x: "surv_" + x, axis='columns', inplace=True)
+    return ret
 
 
 def fix_number_cols(df):
     print("# Fix number columns")
-    df['invest_100_post'] = df.invest_100_post.str.extract(r'(\d+)').astype(float)
-    df['invest_100_pre'] = df.invest_100_pre.str.extract(r'(\d+)').astype(float)
-    df['self_place'] = df.self_place.str.extract(r'(\d+)').astype(float)
-    df['age'] = df.age.str.extract(r'(\d+)').astype(float)
+    df['surv_invest_100_post'] = df.surv_invest_100_post.str.extract(r'(\d+)').astype(float)
+    df['surv_invest_100_pre'] = df.surv_invest_100_pre.str.extract(r'(\d+)').astype(float)
+    df['surv_self_place'] = df.surv_self_place.str.extract(r'(\d+)').astype(float)
+    df['surv_age'] = df.surv_age.str.extract(r'(\d+)').astype(float)
     
     return df
 
@@ -144,9 +146,10 @@ def fix_number_cols(df):
 #Remove the Timestamp and Unnamed columns
 def remove_unneeded(df):
     print ("# Removing uneeded survey columns")
-    drop = []
+    drop = ['surv_confirm', 'surv_future_contact', 'surv_signature', 'surv_consent', 'surv_d_pre_1',
+            'surv_d_pre_2', 'surv_3dig_id', 'surv_d']
     for c in list(df):
-        if c.startswith("Unnamed") or c.startswith('Timestamp'):
+        if c.startswith("surv_Unnamed") or c.startswith('surv_Timestamp'):
             drop.append(c)
             
     ret = df.drop(drop, axis='columns')
@@ -164,8 +167,8 @@ if __name__ == '__main__':
     all = remove_unneeded(all)
     all = fix_number_cols(all)
         
-    all = remove_new_lines(all, 'strategy')
-    all = remove_new_lines(all, 'improve')
+    all = remove_new_lines(all, 'surv_strategy')
+    all = remove_new_lines(all, 'surv_improve')
 
     #
     # Write out the results

@@ -4,11 +4,11 @@ import numpy as np
 
 TEMP_DIR = 'preproc/temp'
 
-player_data = pd.read_csv(f'{TEMP_DIR}/intermed_player.csv')
+player_data = pd.read_csv(f'{TEMP_DIR}/intermed_player.csv').set_index(['part_label', 'round'])
 group_data = pd.read_csv(f'{TEMP_DIR}/preproc_group.csv').set_index(['session', 'round'])
 
 
-print("## Preproc Group - Player")
+print("## Preproc Player")
 
 print("\t# Calculating Forecast Errors")
 
@@ -36,6 +36,9 @@ player_data.insert(idx+2, 'fcast_err_2', f2_error)
 player_data.insert(idx+3, 'fcast_err_3', f3_error)
 
 
+# prepend column names with "pl_"
+player_data.rename(mapper= lambda x: "pl_" + x if x != 'session' else x, axis='columns', inplace=True)
+
 #write back out to file
-player_data.to_csv(f"{TEMP_DIR}/preproc_player.csv", index=False)
+player_data.to_csv(f"{TEMP_DIR}/preproc_player.csv")
 
