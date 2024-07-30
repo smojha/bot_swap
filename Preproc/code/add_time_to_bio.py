@@ -120,38 +120,39 @@ def add_time(df, colname):
 
     
     # merge time column and data
-    ret_df = data.set_index(time_col)
-    
+    df = data.set_index(time_col)
+
+
     # z-score and remove outliers
     if colname == 'ACC':
-        ret_df['zscore_x'] = zscore(ret_df.x)
-        ret_df['zscore_y'] = zscore(ret_df.y)
-        ret_df['zscore_z'] = zscore(ret_df.z)
-        ret_df = ret_df[(ret_df.zscore_x.abs() < OUTLIER_THOLD) & (ret_df.zscore_y.abs() < OUTLIER_THOLD) & (ret_df.zscore_z.abs() < OUTLIER_THOLD)]
+        df['zscore_x'] = zscore(df.x)
+        df['zscore_y'] = zscore(df.y)
+        df['zscore_z'] = zscore(df.z)
+        df = df[(df.zscore_x.abs() < OUTLIER_THOLD) & (df.zscore_y.abs() < OUTLIER_THOLD) & (df.zscore_z.abs() < OUTLIER_THOLD)]
 
     else:
-        ret_df['zscore'] = zscore(ret_df.value)     
-        ret_df = ret_df[ret_df.zscore.abs() < OUTLIER_THOLD]
+        df['zscore'] = zscore(df.value)     
+        df = df[df.zscore.abs() < OUTLIER_THOLD]
 
 
     # hi / lo pass decomp
     if colname == 'ACC':
-        tonic, phasic = decompose_eda_signal(ret_df.zscore_x, freq)
-        ret_df['tonic_x'] = tonic
-        ret_df['phasic_x'] = phasic
-        tonic, phasic = decompose_eda_signal(ret_df.zscore_y, freq)
-        ret_df['tonic_y'] = tonic
-        ret_df['phasic_y'] = phasic
-        tonic, phasic = decompose_eda_signal(ret_df.zscore_z, freq)
-        ret_df['tonic_z'] = tonic
-        ret_df['phasic_z'] = phasic
+        tonic, phasic = decompose_eda_signal(df.zscore_x, freq)
+        df['tonic_x'] = tonic
+        df['phasic_x'] = phasic
+        tonic, phasic = decompose_eda_signal(df.zscore_y, freq)
+        df['tonic_y'] = tonic
+        df['phasic_y'] = phasic
+        tonic, phasic = decompose_eda_signal(df.zscore_z, freq)
+        df['tonic_z'] = tonic
+        df['phasic_z'] = phasic
         
     else:
-        tonic, phasic = decompose_eda_signal(ret_df.zscore, freq)
-        ret_df['tonic'] = tonic
-        ret_df['phasic'] = phasic
+        tonic, phasic = decompose_eda_signal(df.zscore, freq)
+        df['tonic'] = tonic
+        df['phasic'] = phasic
     
-    return ret_df.reset_index()
+    return df.reset_index()
 
 
 # IBI is a special case
@@ -251,28 +252,28 @@ def task(_iq):
     
 
 
-if __name__ == '__main__':
-    #set_start_method('fork')
+# if __name__ == '__main__':
+#     #set_start_method('fork')
     
-    print("###\n###\n### Adding Timestamps and Page Label to Biometric Data")
+#     print("###\n###\n### Adding Timestamps and Page Label to Biometric Data")
     
-    args, pt_data = set_up()
+#     args, pt_data = set_up()
 
-    m = Manager()
-    iq = m.Queue()
-    num_tasks = 0
-    retrieved = 0
+#     m = Manager()
+#     iq = m.Queue()
+#     num_tasks = 0
+#     retrieved = 0
     
-    procs = [Process(target=task, args=[iq]) for _ in range(cpu_count())]
-    for p in procs: p.start()
-    for dir, part_lab in args:
-        iq.put([dir, part_lab, pt_data])
-        num_tasks += 1
-    for _ in range(cpu_count()):iq.put('STOP')
-    for p in procs: p.join()
+#     procs = [Process(target=task, args=[iq]) for _ in range(cpu_count())]
+#     for p in procs: p.start()
+#     for dir, part_lab in args:
+#         iq.put([dir, part_lab, pt_data])
+#         num_tasks += 1
+#     for _ in range(cpu_count()):iq.put('STOP')
+#     for p in procs: p.join()
     
 
     
-# args, pt_data = set_up(skip=False)
+args, pt_data = set_up(skip=False)
 # d, pid  = args[14]
 # process_participant(d, pid, pt_data)

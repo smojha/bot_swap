@@ -103,3 +103,4 @@ part_final.drop(to_drop, axis='columns', inplace=True)
 # Write out to disk
 print("Writing to disk")
 part_final.to_csv(f'{TEMP_DIR}/preproc_participant.csv', index=False)
+
