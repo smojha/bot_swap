@@ -116,9 +116,6 @@ sess_data = sess_data.join(peaks)
 sess_data = sess_data.join(max_round)
 
 
-# Rename the label column to something that makes more sense in the context of how the column is used.
-sess_data.rename(mapper={'label': 'sess_date'}, axis='columns', inplace=True)
-
 sess_data.drop('comment', axis='columns', inplace=True)
 
 # A mistake was made while setting up session: yh2bjr4n

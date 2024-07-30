@@ -94,6 +94,8 @@ part_data = get_variables('participant', rounds_data, include_participant=True)
 print("... Sessions")
 sess_data = get_variables('session', rounds_data)
 sess_data.dropna(axis=1, how='all', inplace=True)
+# Rename the label column to something that makes more sense in the context of how the column is used.
+sess_data.rename(mapper={'label': 'sess_date'}, axis='columns', inplace=True)
 sess_data.drop(['is_demo'], axis=1, inplace=True)
 
 # Player Data
