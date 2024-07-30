@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 
-DATA_DIR = 'Data'
+DATA_DIR = 'Raw_Data'
 TEMP_DIR = 'Preproc/temp'
 
 DUPLICATES = [

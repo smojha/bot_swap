@@ -1,8 +1,8 @@
 import pandas as pd
 import glob
 
-DATA_DIR = 'Data'
-TEMP_DIR = 'preproc/temp'
+DATA_DIR = 'Raw_Data'
+TEMP_DIR = 'Preproc/temp'
 PRE_1_BASE_NAME = 'Neurofinance 1st pre-experiment.csv'
 PRE_2_BASE_NAME = 'Neurofinance 2nd pre-experiment.csv'
 POST_BASE_NAME = 'Neurofinance post-experiment.csv'

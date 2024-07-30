@@ -15,7 +15,7 @@ from bio_preproc_funcs import decompose_eda_signal
 
 BIO_TEMP_DIR = 'Preproc/temp/bio/page_merge'
 TEMP_DIR = 'Preproc/temp'
-BIO_SOURCE_DIR = 'Data/EDA_data'
+BIO_SOURCE_DIR = 'Raw_Data/bio_data'
 DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
 OUTLIER_THOLD = 2.5
 
