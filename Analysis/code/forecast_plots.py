@@ -23,8 +23,8 @@ sess_data = pd.read_csv(f'{INPUT_DIR}/session.csv').set_index('session')
 
 ## Consolidate Forecast Data
 p_grp = player_data.groupby(['session', 'round'])
-f_means = p_grp[['f0', 'f1', 'f2', 'f3']].mean()
-t_rnd = p_grp[['fcast_rnd_0', 'fcast_rnd_1', 'fcast_rnd_2', 'fcast_rnd_3']].max()
+f_means = p_grp[['pl_f0', 'pl_f1', 'pl_f2', 'pl_f3']].mean()
+t_rnd = p_grp[['pl_fcast_rnd_0', 'pl_fcast_rnd_1', 'pl_fcast_rnd_2', 'pl_fcast_rnd_3']].max()
 
 forecast = f_means.join(t_rnd)
 
@@ -38,8 +38,9 @@ class ForecastModifier(SessionPlotModifier):
         f_data = forecast.loc[self.session]
         is_first = True
         for _, row in f_data.iterrows():
-            y = [ row.f0, row.f1, row.f2, row.f3 ]
-            x = [ row.fcast_rnd_0, row.fcast_rnd_1, row.fcast_rnd_2, row.fcast_rnd_3 ]
+            y = [ row.pl_f0, row.pl_f1, row.pl_f2, row.pl_f3 ]
+            x = [ row.pl_fcast_rnd_0, row.pl_fcast_rnd_1,
+                 row.pl_fcast_rnd_2, row.pl_fcast_rnd_3 ]
             
             f_lab = "Forecasts" if is_first else None
             plot.plot(x, y, color='lightgray', label=f_lab)
@@ -54,7 +55,7 @@ fmod_for_session = lambda s: ForecastModifier(s)
 
 def title_for_session(sess):
     s = sess_data.loc[sess]
-    return f"Mean Forecasts {s.label} (N={s.n}; Float={s.flt})"
+    return f"Mean Forecasts {s.sess_date} (N={s.n}; Float={s.flt})"
 
 #Plot Sessions
 sp = SessionPlotter(group_data, mod_cb=fmod_for_session, title_cb=title_for_session)

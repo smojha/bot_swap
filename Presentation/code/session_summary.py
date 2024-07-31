@@ -24,7 +24,7 @@ for s in sessions:
     
     parts_dict = parts_for_sess.set_index('part_label').to_dict(orient='index')
     
-    sess_label = session_data.loc[s].label
+    sess_label = session_data.loc[s].sess_date
     
     # Render the latex with the player data
     t = Template(template_str)

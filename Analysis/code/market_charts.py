@@ -43,7 +43,7 @@ def plot_session(session, price, volume, shares, figsize=SESSION_FIG_SIZE):
     plot_3.set_xlabel('Round', fontsize=LABEL_SIZE)
    
  
-    plt.suptitle(f"{session.label}   (N = {session.n})"  , fontsize=22)
+    plt.suptitle(f"{session.sess_date}   (N = {session.n})"  , fontsize=22)
 
     plt.savefig(f'{IMG_DIR}/market_graph_{session.name}.png', transparent=False)
     plt.close()
@@ -56,6 +56,6 @@ for sess in sessions:
     group_data_for_session = group_data[group_data.session == sess].set_index('round')
     player_data_for_session = player_data[player_data.session == sess].set_index('round')
     sess_d = sess_data.loc[sess]
-    share_paths = player_data_for_session.groupby(['part_label', 'round']).shares.max()
+    share_paths = player_data_for_session.groupby(['part_label', 'round']).pl_shares.max()
     
     plot_session(sess_d, group_data_for_session.price, group_data_for_session.volume, share_paths)

@@ -44,8 +44,8 @@ for s in sess:
         
         #Share paths
         shares = p[p.part_label==u]
-        ax = shares.set_index('round').shares.plot(ax=axs[1], label="Stock Pos.")
-        max_shares = shares.shares.max()
+        ax = shares.set_index('round').pl_shares.plot(ax=axs[1], label="Stock Pos.")
+        max_shares = shares.pl_shares.max()
         ax.vlines(exe['round'], 0, max_shares, colors='lightgray', linestyle='dotted', zorder=0, label="Executed Trade")
         ax.legend()
 

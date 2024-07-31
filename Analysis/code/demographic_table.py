@@ -10,8 +10,8 @@ part_data = pd.read_csv(f"{INPUT_DIR}/participant.csv").set_index(['session', 'p
 
 #Clean up Race Variable
 WHAT = 'What race do you consider yourself? Write here:'
-part_data.loc[part_data.race==WHAT, 'race'] = 'Other'
-part_data.loc[part_data.race.isna(), 'race'] = 'Prefer Not to Say'
+part_data.loc[part_data.surv_race==WHAT, 'surv_race'] = 'Other'
+part_data.loc[part_data.surv_race.isna(), 'surv_race'] = 'Prefer Not to Say'
 
 
 def get_sess_stats(r):
@@ -35,11 +35,11 @@ def get_count_stat(p, col, name, fmat='d'):
     lab = p[p.site == 'Lab']
     prolific = p[p.site=='Prolific']
 
-    c_all = p.groupby(col).age.count()
+    c_all = p.groupby(col).surv_age.count()
     c_all.name='All'
-    c_lab = lab.groupby(col).age.count()
+    c_lab = lab.groupby(col).surv_age.count()
     c_lab.name='Lab'
-    c_pro = prolific.groupby(col).age.count()
+    c_pro = prolific.groupby(col).surv_age.count()
     c_pro.name='Prolific'
     
     stg_1 = pd.merge(c_all, c_lab, how='left', left_index=True, right_index=True)
@@ -59,7 +59,7 @@ def get_mean_stat(p, col, name, fmat='.2f'):
     
     return df
   
-MEAN_VARS = [('age', 'Age'),
+MEAN_VARS = [('surv_age', 'Age'),
                   ('quiz_grade', 'Quiz Grade'),
                   ('quiz_1_init_score', 'Quiz 1'),
                   ('quiz_2_init_score', 'Quiz 2'),
@@ -70,10 +70,10 @@ MEAN_VARS = [('age', 'Age'),
                   ('forecast_bonus', 'Forecast Bonus'),
                   ('risk_bonus', 'Risk Bonus'),
                   ('total_bonus', 'Total Bonus'),
-                  ('risk_gen_pre', 'Risk Gen (pre)'),
-                  ('risk_gen_post', 'Risk Gen (post)'),
-                  ('invest_100_pre', 'Invest 100 (pre)'),
-                  ('invest_100_post', 'Invest 100 (post)'),
+                  ('surv_risk_gen', 'Risk Gen (pre)'),
+                  ('surv_risk_gen_post', 'Risk Gen (post)'),
+                  ('surv_invest_100_pre', 'Invest 100 (pre)'),
+                  ('surv_invest_100_post', 'Invest 100 (post)'),
                  ]       
 
 
@@ -94,8 +94,8 @@ def get_part_stats(p, mean_vars):
         
     df = pd.concat(rows)
     
-    race_count = get_count_stat(p, 'race', 'Race')
-    gender_count = get_count_stat(p, 'gender', "Gender")
+    race_count = get_count_stat(p, 'surv_race', 'Race')
+    gender_count = get_count_stat(p, 'surv_gender', "Gender")
     df = pd.concat([df, race_count, gender_count])
 
     return df.fillna(0)
@@ -121,7 +121,7 @@ for sess, row in sess_data.iterrows():
     
     
 #Create stats table for all
-MEAN_VARS_FULL_QUIZ = [('age', 'Age'),
+MEAN_VARS_FULL_QUIZ = [('surv_age', 'Age'),
                   ('quiz_grade', 'Quiz Grade'),
                   ('quiz_1_init_score', 'Quiz 1'),
                   ('quiz_2_init_score', 'Quiz 2'),
@@ -131,11 +131,11 @@ MEAN_VARS_FULL_QUIZ = [('age', 'Age'),
                   ('market_bonus', 'Market Bonus'),
                   ('forecast_bonus', 'Forecast Bonus'),
                   ('risk_bonus', 'Risk Bonus'),
-                 ('total_bonus', 'Total Bonus'),
-                  ('risk_gen_pre', 'Risk Gen (pre)'),
-                  ('risk_gen_post', 'Risk Gen (post)'),
-                  ('invest_100_pre', 'Invest 100 (pre)'),
-                  ('invest_100_post', 'Invest 100 (post)'),
+                  ('total_bonus', 'Total Bonus'),
+                  ('surv_risk_gen', 'Risk Gen (pre)'),
+                  ('surv_risk_gen_post', 'Risk Gen (post)'),
+                  ('surv_invest_100_pre', 'Invest 100 (pre)'),
+                  ('surv_invest_100_post', 'Invest 100 (post)'),
                  ]       
 all_stats = get_part_stats(part_data.reset_index(level=0, drop=True), MEAN_VARS_FULL_QUIZ)
 all_stats.style\
