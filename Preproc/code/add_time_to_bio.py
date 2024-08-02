@@ -390,30 +390,30 @@ def task(_iq):
     
 
 
-# if __name__ == '__main__':
-#     #set_start_method('fork')
+if __name__ == '__main__':
+    #set_start_method('fork')
     
-#     print("###\n###\n### Adding Timestamps and Page Label to Biometric Data")
+    print("###\n###\n### Adding Timestamps and Page Label to Biometric Data")
     
-#     args, pt_data = set_up()
+    args, pt_data = set_up()
 
-#     m = Manager()
-#     iq = m.Queue()
-#     num_tasks = 0
-#     retrieved = 0
+    m = Manager()
+    iq = m.Queue()
+    num_tasks = 0
+    retrieved = 0
     
-#     procs = [Process(target=task, args=[iq]) for _ in range(cpu_count())]
-#     for p in procs: p.start()
-#     for dir, part_lab in args:
-#         iq.put([dir, part_lab, pt_data])
-#         num_tasks += 1
-#     for _ in range(cpu_count()):iq.put('STOP')
-#     for p in procs: p.join()
+    procs = [Process(target=task, args=[iq]) for _ in range(cpu_count())]
+    for p in procs: p.start()
+    for dir, part_lab in args:
+        iq.put([dir, part_lab, pt_data])
+        num_tasks += 1
+    for _ in range(cpu_count()):iq.put('STOP')
+    for p in procs: p.join()
     
 
     
-args, pg = set_up(skip=False)
-d, pl = ('Raw_Data/bio_data/Hybrid_24_07_15/52W', 'pdqr3ms5_52W')
+# args, pg = set_up(skip=False)
+# d, pl = ('Raw_Data/bio_data/Hybrid_24_07_15/52W', 'pdqr3ms5_52W')
 
 # def is_it_new(d):
 #     return len(list(glob.glob(f"{d}/*.avro"))) > 0
@@ -421,11 +421,11 @@ d, pl = ('Raw_Data/bio_data/Hybrid_24_07_15/52W', 'pdqr3ms5_52W')
 # d, pl = new_ones[0]
 
 # pid = os.path.basename(d)
-avro_files = glob.glob(os.path.join(d, '*.avro'))
-avro_data_sets = [read_avro(f) for f in avro_files]
-avro_data_sets = [d for d in avro_data_sets if d is not None]
+# avro_files = glob.glob(os.path.join(d, '*.avro'))
+# avro_data_sets = [read_avro(f) for f in avro_files]
+# avro_data_sets = [d for d in avro_data_sets if d is not None]
 
-a = get_bio_marker_for_tag_xyz(avro_data_sets[0], 'accelerometer')
+# a = get_bio_marker_for_tag_xyz(avro_data_sets[0], 'accelerometer')
 
 
 
