@@ -6,6 +6,9 @@ from pathlib import Path
 import pandas.io.common
 from multiprocessing import Process, Manager, cpu_count #, set_start_method
 import sys
+from avro.datafile import DataFileReader
+from avro.io import DatumReader
+
 
 if 'Preproc/code' not in sys.path:
     sys.path.insert(0, 'Preproc/code')
@@ -25,7 +28,7 @@ def get_part_label_for_dir(part_dir, part_data):
     
     #some bio folders refer to non-existent ids, skip them
     if part_data[part_data.plab_short == id].shape[0] == 0:
-        print(f"Id in bio data not in experiment data: {id}")
+        print(f"Id in bio data not in experiment data: {part_dir} {id}")
         return
     
     part_label = part_data[part_data.plab_short == id].part_label.values[0]
@@ -97,62 +100,41 @@ def set_up(skip=True):
 # Most data are formatted as the column names are the start time as number of seconds since the epoch
 # The second row contains the frequency of the data
 # the rest of the rows are the measurements.
-def add_time(df, colname):
-
-    #pull out special information (Timestamp, and frequency)
-    epoch = float(df.columns[0])
-    freq = df.iloc[0,0]
-    data = df.iloc[1:, :].copy()  # the actual data are located from the second row
+def add_time(time_series, epoch, freq, include_time=True):
     
+    if freq == 0:
+        return None
+    
+    data = pd.Series(time_series)
+    data.name = 'value'
 
     #generate time column
-    step = 1/freq
-    time_col = pd.Series([epoch + i*step for i in range(data.shape[0])])
-    time_col.name = 'time'
-    
-
-    #rename data column
-    if colname == 'ACC':
-        data.columns = ['x', 'y', 'z']
+    if include_time:
+        step = 1/freq
+        time_col = pd.Series([epoch + i*step for i in range(len(data))])
+        time_col.name = 'time'
+                
+        # merge time column and data
+        df = pd.concat([time_col, data], axis='columns')
     else:
-        data.columns = ['value']
-        
+        df = data.to_frame()
 
+    df['zscore'] = zscore(df.value)     
+    df = df[df.zscore.abs() < OUTLIER_THOLD]
     
-    # merge time column and data
-    df = data.set_index(time_col)
-
-
-    # z-score and remove outliers
-    if colname == 'ACC':
-        df['zscore_x'] = zscore(df.x)
-        df['zscore_y'] = zscore(df.y)
-        df['zscore_z'] = zscore(df.z)
-        df = df[(df.zscore_x.abs() < OUTLIER_THOLD) & (df.zscore_y.abs() < OUTLIER_THOLD) & (df.zscore_z.abs() < OUTLIER_THOLD)]
-
-    else:
-        df['zscore'] = zscore(df.value)     
-        df = df[df.zscore.abs() < OUTLIER_THOLD]
+    if df.shape[0] < 19:
+        return
 
 
     # hi / lo pass decomp
-    if colname == 'ACC':
-        tonic, phasic = decompose_eda_signal(df.zscore_x, freq)
-        df['tonic_x'] = tonic
-        df['phasic_x'] = phasic
-        tonic, phasic = decompose_eda_signal(df.zscore_y, freq)
-        df['tonic_y'] = tonic
-        df['phasic_y'] = phasic
-        tonic, phasic = decompose_eda_signal(df.zscore_z, freq)
-        df['tonic_z'] = tonic
-        df['phasic_z'] = phasic
-        
-    else:
-        tonic, phasic = decompose_eda_signal(df.zscore, freq)
-        df['tonic'] = tonic
-        df['phasic'] = phasic
+    tonic, phasic = decompose_eda_signal(df.zscore, freq)
+    df['tonic'] = tonic
+    df['phasic'] = phasic
     
-    return df.reset_index()
+    # Setting the index to 'time'
+    # This ensures that if these time series needs to be combined with others (ACC)
+    # That they will properly align
+    return df.set_index('time')
 
 
 # IBI is a special case
@@ -175,7 +157,7 @@ def add_page_names(df, pid, pt_data):
     page_times = pt_data[pt_data.plab_short == pid].sort_values('tse')
     
     if page_times.shape[0] == 0:
-        print(f"PageTime data does not contain id: {pid}")
+        print(f"\t - PageTime data does not contain id: {pid}")
         return
 
     df['page'] = ' '
@@ -195,30 +177,13 @@ def add_page_names(df, pid, pt_data):
         
     return df[df.rnd != -99]  # ignore data that occurrs after the experiment
 
-    
-
-# For each participant....
-# given a path to a participant's bio data
-def process_participant(part_dir, part_label, pt_data):
-    # the participant id is the directory name
-    id = os.path.basename(part_dir)
 
 
-    # Check if the participant is using a new for old empatica
-    # In the old E4 data files, the EDA file is a single column
-    try:
-        eda = pd.read_csv(part_dir+"/EDA.csv")
-        if len(list(eda)) != 1:
-            print(f"Data format not old: {part_dir}")
-            return
-            
-    except FileNotFoundError:
-        print(f"Miss EDA.csv file in directory: {part_dir}")
-        return
-
-
-    # Ensure that the output directory exists
-    Path(f"{BIO_TEMP_DIR}/{part_label}").mkdir(parents=True, exist_ok=True)
+#Process the old-style files
+def process_old(part_dir, part_label, pt_data):
+    print(f"\tProcessing Old Device: {part_label}")
+    # the participant pid is the directory name
+    pid = os.path.basename(part_dir)
 
     # Open files and add timestamps
     for file_name in DATA_FILE_NAMES:
@@ -226,23 +191,196 @@ def process_participant(part_dir, part_label, pt_data):
             df = pd.read_csv(f"{part_dir}/{file_name}.csv")
         
         except FileNotFoundError:
-            print(f"Missing file in dir: {part_dir} - {file_name}")
+            print(f"\t\t - Missing file in dir: {part_dir} - {file_name}")
             return
         except pandas.errors.EmptyDataError:
-            print(f"EmptyDataError - {part_dir} - {file_name}")
+            print(f"\t\t - EmptyDataError - {part_dir} - {file_name}")
             return
+        
+        try:
+            epoch = float(df.columns[0])
+        except ValueError:
+            print(f"Value Error in process_old: {part_dir}, {part_label}")
+            raise
+        freq = df.iloc[0,-1]
+        time_series = df.iloc[1:, :]
 
         # Special case for IBI
         if file_name == 'IBI':
             w_time = add_time_ibi(df)    
             pass
-        else:
-            w_time = add_time(df, file_name)
+        
+        elif file_name == 'ACC':
+            t_series = df.iloc[:, 0]
+            x = add_time(t_series, epoch, freq)
+            x.columns = ['x', 'x_zscore', 'x_tonic', 'x_phasic']
             
-        w_page_names = add_page_names(w_time, id, pt_data)
+            t_series = df.iloc[:, 0]
+            y = add_time(t_series, epoch, freq)
+            y.columns = ['y', 'y_zscore', 'y_tonic', 'y_phasic']
+            
+            t_series = df.iloc[:, 0]
+            z = add_time(t_series, epoch, freq)
+            z.columns = ['z', 'z_zscore', 'z_tonic', 'z_phasic']
+            
+            w_time = pd.concat([x,y,z], axis='columns').reset_index()
+            
+        else:
+            # These are the typical file.  TEMP, HR, EDA, BVP
+            w_time = add_time(time_series.iloc[:,0].values, epoch, freq).reset_index()
+    
+        # Add the page names
+        w_page_names = add_page_names(w_time, pid, pt_data)
         
         if w_page_names is not None:
             w_page_names.to_csv(f"{BIO_TEMP_DIR}/{part_label}/{file_name}.csv", index=False)
+
+
+def read_avro(avro_file_path):
+    try:
+        with open(avro_file_path, 'rb') as avro_file:
+            reader = DataFileReader(avro_file, DatumReader())
+            data = next(reader)
+            return data
+    
+    except Exception as e:
+        print(f"Error processing file {avro_file_path}: {e}")
+
+
+def get_bio_marker_for_tag_xyz(data, data_tag):
+    # accelerometer
+    raw_data = data["rawData"][data_tag]
+    x = raw_data["x"]
+    y = raw_data["y"]
+    z = raw_data["z"]
+        
+    freq = raw_data["samplingFrequency"]
+    epoch = raw_data["timestampStart"] / 1e6
+    x_w_time = add_time(x, epoch, freq)
+    x_w_time.columns = ['x', 'x_zscore', 'x_tonic', 'x_phasic']
+    
+    y_w_time = add_time(y, epoch, freq)
+    y_w_time.columns = ['y', 'y_zscore', 'y_tonic', 'y_phasic']
+    
+    z_w_time = add_time(z, epoch, freq)
+    z_w_time.columns = ['z', 'z_zscore', 'z_tonic', 'z_phasic']
+
+    data_combined = pd.concat([x_w_time, y_w_time, z_w_time], axis='columns')
+    return data_combined.reset_index()
+
+    
+def get_bio_marker_for_tag(data, data_tag):
+    raw_data = data["rawData"][data_tag]
+    freq = raw_data["samplingFrequency"]
+    epoch = raw_data["timestampStart"] / 1e6
+    data_w_time = add_time(raw_data["values"], epoch, freq)
+    if data_w_time is None:
+        return None
+    return data_w_time.reset_index()
+
+
+
+##
+## Process the new style data file (*.avro)
+## 
+def process_new(part_dir, part_label, pt_data):
+    print(f"\tProcessing New Device: {part_label}")
+    # the participant pid is the directory name
+    pid = os.path.basename(part_dir)
+    
+    avro_files = glob.glob(os.path.join(part_dir, '*.avro'))
+    avro_data_sets = [read_avro(f) for f in avro_files]
+    avro_data_sets = [d for d in avro_data_sets if d is not None]
+
+    # data containers
+    accelerometer_data = []
+    # gyroscope_data = []
+    eda_data = []
+    temperature_data = []
+    bvp_data = []
+    # systolic_peaks_data = []
+    steps_data = []
+    # tags_data = []
+
+    # process each avro file
+    for data in avro_data_sets:
+        # accelerometer
+        acc_w_time = get_bio_marker_for_tag_xyz(data, 'accelerometer')
+        accelerometer_data.append(acc_w_time)
+        
+        # gyroscope
+        # gyro_w_time = get_bio_marker_for_tag_xyz(data, 'gyroscope', False)
+        # gyroscope_data.append(gyro_w_time)
+        
+        markers = [
+            (eda_data, 'eda'),
+            (temperature_data, 'temperature'),
+            (bvp_data, 'bvp'),
+            (steps_data, 'steps'),
+            # (tags_data, 'tags'),
+        ]
+        
+        for accumulator, tag in markers:            
+            data_for_tag = get_bio_marker_for_tag(data, tag)
+            if data_for_tag is not None:
+                accumulator.append(data_for_tag)
+            
+    
+        # # systolic peaks
+        # sps = data["rawData"]["systolicPeaks"]
+        # for sp in sps["peaksTimeNanos"]:
+        #     systolic_peaks_data.append([sp])
+                
+    acc_df = pd.concat(accelerometer_data).sort_values('time')
+    # gyro_df = pd.concat(gyroscope_data).sort_values('time')
+    eda_df = pd.concat(eda_data).sort_values('time')
+    temp_df = pd.concat(temperature_data).sort_values('time')
+    bvp_df = pd.concat(bvp_data).sort_values('time')
+    
+    steps_df = None
+    if len(steps_data) > 0:
+        steps_df = pd.concat(steps_data).sort_values('time')
+    # tags_df = pd.concat(tags_data).sort_values('time')
+ 
+    data_w_filenames = [
+    (acc_df, 'ACC'),
+    # (gyro_df, 'GYRO'),
+    (eda_df, 'EDA'),
+    (temp_df, 'TEMP'),
+    (bvp_df, 'BVP'),
+    (steps_df, 'STEPS'),
+    # (tags_df, 'TAGS'),
+    ]
+ 
+
+    for df, fn in data_w_filenames:
+        if df is None:
+            print(f"\t\t - No data for: {fn}. Skipping.  Likely not enough data points for decomp.")
+            continue
+        df_w_page = add_page_names(df, pid, pt_data)
+        if df_w_page is not None:
+            df_w_page.to_csv(f"{BIO_TEMP_DIR}/{part_label}/{fn}.csv", index=False)
+
+
+# For each participant....
+# given a path to a participant's bio data
+def process_participant(part_dir, part_label, pt_data):
+    
+    # Ensure that the output directory exists
+    Path(f"{BIO_TEMP_DIR}/{part_label}").mkdir(parents=True, exist_ok=True)
+    
+    # Check if the participant is using a new for old empatica
+    # In the old E4 data files, the EDA file is a single column
+    # new devices have avro files
+    is_new = len(list(glob.glob(f"{part_dir}/*.avro"))) > 0
+
+   # Process files
+    if is_new:
+        process_new(part_dir, part_label, pt_data)
+    else:
+        process_old(part_dir, part_label, pt_data)
+        
+            
 
 
 # Mulitprocessing stuff
@@ -274,6 +412,23 @@ def task(_iq):
     
 
     
-args, pt_data = set_up(skip=False)
-# d, pid  = args[14]
-# process_participant(d, pid, pt_data)
+args, pg = set_up(skip=False)
+d, pl = ('Raw_Data/bio_data/Hybrid_24_07_15/52W', 'pdqr3ms5_52W')
+
+# def is_it_new(d):
+#     return len(list(glob.glob(f"{d}/*.avro"))) > 0
+# new_ones = [a for a in args if is_it_new(a[0])]
+# d, pl = new_ones[0]
+
+# pid = os.path.basename(d)
+avro_files = glob.glob(os.path.join(d, '*.avro'))
+avro_data_sets = [read_avro(f) for f in avro_files]
+avro_data_sets = [d for d in avro_data_sets if d is not None]
+
+a = get_bio_marker_for_tag_xyz(avro_data_sets[0], 'accelerometer')
+
+
+
+
+# for d, pl in new_ones[2:]:
+#     process_participant(d, pl, pg)
