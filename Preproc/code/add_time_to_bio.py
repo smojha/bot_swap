@@ -22,16 +22,23 @@ BIO_SOURCE_DIR = 'Raw_Data/bio_data'
 DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
 OUTLIER_THOLD = 2.5
 
+
+## The directory that stores the biometric data has the name of the 3-digit code of the participant
+## The actual participant lable is <sessioin_code>_<3-digit_code>.  This function will extract
+# the 3-digit code from the participant directory and look up the full partiipant code form the
+# given participant directory. 
 def get_part_label_for_dir(part_dir, part_data):
     # the participant id is the directory name
-    id = os.path.basename(part_dir)
+    _3d_id = os.path.basename(part_dir)
     
     #some bio folders refer to non-existent ids, skip them
-    if part_data[part_data.plab_short == id].shape[0] == 0:
-        print(f"Id in bio data not in experiment data: {part_dir} {id}")
+    if part_data[part_data.plab_short == _3d_id].shape[0] == 0:
+        print(f"Id in bio data not in experiment data: {part_dir}")
         return
-    
-    part_label = part_data[part_data.plab_short == id].part_label.values[0]
+
+    #The set_up function should have already checked for duplicate ids
+    # So we, just roll with it here and return the first one we find.
+    part_label = part_data[part_data.plab_short == _3d_id].part_label.values[0]
 
 
     # find session
@@ -42,6 +49,7 @@ def get_part_label_for_dir(part_dir, part_data):
     return part_label
 
 
+## Overhead tasks. Protect this with a function so processes don't re-run this stuff
 def set_up(skip=True):
 
     # This is to aviod a warning message that comes from huggingface 
@@ -63,19 +71,26 @@ def set_up(skip=True):
     dups =  c[c>1]
     # Alert if there are duplicates detected
     if dups.shape[0] > 0:
-        print("Found duplicate ids")
+        print("WARNING:  Found duplicate ids")
         print(dups)
         
-    # Reduce the pagee time data to in-lab participants and add a shorteded part_label
+    # Reduce the page time data to in-lab participants and add a shorteded part_label
     pt_data = pt_data.set_index('part_label').loc[part_data.part_label]
     pt_data = pt_data.join(part_data.set_index('part_label').plab_short)
-    pt_data['tse'] = pt_data.tse.apply(pd.Timestamp)
+    
+    #We are currently using the epoch timestamp.  Treating time information as a number
+    # is more efficient.  Thus, we do not need to convert these now.
+    #pt_data['tse'] = pt_data.tse.apply(pd.Timestamp)
     
     
+    # Generate a list of directoies, filtering out ineligible directory names
     dirs = [f for f in glob.glob(f"{BIO_SOURCE_DIR}/Hybrid_*/*") if len(os.path.basename(f)) == 3]
+    
+    # Pair a participant directory with a full part_label.  
     args = [(d, get_part_label_for_dir(d, part_data)) for d in dirs]
     
-    # Skip participants that already exist in the BIO_TEMP_DIR folder
+    # Skip participants that already exist in the BIO_TEMP_DIR folder.
+    # This is a return object.
     args_to_keep = []
     for part_dir, part_label in args:
         
@@ -90,7 +105,7 @@ def set_up(skip=True):
             args_to_keep.append((part_dir, part_label))
     
     
-    #Make output dir
+    #Ensure that the  output dir exists
     Path(BIO_TEMP_DIR).mkdir(parents=True, exist_ok=True)
     
     return args_to_keep, pt_data
@@ -100,10 +115,10 @@ def set_up(skip=True):
 # Most data are formatted as the column names are the start time as number of seconds since the epoch
 # The second row contains the frequency of the data
 # the rest of the rows are the measurements.
+#
+# We are z-scoring and filtering out outliiers So for bio markers that collect measurments in
+# multiple dimensions, we need to index the returned data frame by timestamp.
 def add_time(time_series, epoch, freq, include_time=True):
-    
-    if freq == 0:
-        return None
     
     data = pd.Series(time_series)
     data.name = 'value'
@@ -204,7 +219,12 @@ def process_old(part_dir, part_label, pt_data):
             raise
         freq = df.iloc[0,-1]
         time_series = df.iloc[1:, :]
-
+        
+            
+        if freq == 0:
+            print (f"\t\t - Zero frequency detected. {part_dir} - {part_label} {file_name}")
+            return
+    
         # Special case for IBI
         if file_name == 'IBI':
             w_time = add_time_ibi(df)    
@@ -223,6 +243,8 @@ def process_old(part_dir, part_label, pt_data):
             z = add_time(t_series, epoch, freq)
             z.columns = ['z', 'z_zscore', 'z_tonic', 'z_phasic']
             
+            # The x,y,z data frames are indexed by timestamp
+            # This ensures that they line up on time.
             w_time = pd.concat([x,y,z], axis='columns').reset_index()
             
         else:
@@ -255,6 +277,11 @@ def get_bio_marker_for_tag_xyz(data, data_tag):
     z = raw_data["z"]
         
     freq = raw_data["samplingFrequency"]
+    #check for 0 freqency files
+    if freq == 0:
+        return None
+    
+
     epoch = raw_data["timestampStart"] / 1e6
     x_w_time = add_time(x, epoch, freq)
     x_w_time.columns = ['x', 'x_zscore', 'x_tonic', 'x_phasic']
@@ -272,11 +299,16 @@ def get_bio_marker_for_tag_xyz(data, data_tag):
 def get_bio_marker_for_tag(data, data_tag):
     raw_data = data["rawData"][data_tag]
     freq = raw_data["samplingFrequency"]
+    #check for 0 freqency files
+    if freq == 0:
+        return None, "freq0"
+    
     epoch = raw_data["timestampStart"] / 1e6
     data_w_time = add_time(raw_data["values"], epoch, freq)
     if data_w_time is None:
-        return None
-    return data_w_time.reset_index()
+        return None, "emptyts"
+    
+    return data_w_time.reset_index(), None
 
 
 
@@ -304,8 +336,12 @@ def process_new(part_dir, part_label, pt_data):
 
     # process each avro file
     for data in avro_data_sets:
+    
         # accelerometer
         acc_w_time = get_bio_marker_for_tag_xyz(data, 'accelerometer')
+        if acc_w_time is None:
+            print (f"\t\t - Zero frequency detected. {part_dir} - {part_label} - accelerometer")
+           
         accelerometer_data.append(acc_w_time)
         
         # gyroscope
@@ -321,8 +357,14 @@ def process_new(part_dir, part_label, pt_data):
         ]
         
         for accumulator, tag in markers:            
-            data_for_tag = get_bio_marker_for_tag(data, tag)
-            if data_for_tag is not None:
+            data_for_tag, error_code = get_bio_marker_for_tag(data, tag)
+            if error_code == 'freq0':
+                print (f"\t\t - Zero frequency detected. {part_dir} - {part_label} - {tag}")
+                
+            elif error_code == 'emptyts':
+                print (f"\t\t - Empty data for tag.  (likely it is too short for spectral decomp) {part_dir} - {part_label} - {tag} ")
+                        
+            else:
                 accumulator.append(data_for_tag)
             
     
