@@ -135,7 +135,7 @@ def add_time(time_series, epoch, freq, include_time=True):
         df = data.to_frame()
 
     df['zscore'] = zscore(df.value)     
-    df = df[df.zscore.abs() < OUTLIER_THOLD]
+    #df = df[df.zscore.abs() < OUTLIER_THOLD]
     
     if df.shape[0] < 19:
         return
