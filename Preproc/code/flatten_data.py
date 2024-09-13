@@ -28,19 +28,20 @@ flat = a.join(player_data[player_columns], on=['part_label', 'round'])
 
 
 ## Read in bio data
-bio_bvp = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_BVP.csv").set_index(['page', 'part_label', 'round'])
+# bio_bvp = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_BVP.csv").set_index(['page', 'part_label', 'round'])
 bio_eda = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_EDA.csv").set_index(['page', 'part_label', 'round'])
 bio_hr = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_HR.csv").set_index(['page', 'part_label', 'round'])
 bio_temp = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_TEMP.csv").set_index(['page', 'part_label', 'round'])
 
 # Rename bio columns
-bio_bvp.rename(mapper=lambda x: 'bvp_'+x, axis='columns', inplace=True)
+# bio_bvp.rename(mapper=lambda x: 'bvp_'+x, axis='columns', inplace=True)
 bio_eda.rename(mapper=lambda x: 'eda_'+x, axis='columns', inplace=True)
 bio_hr.rename(mapper=lambda x: 'hr_'+x, axis='columns', inplace=True)
 bio_temp.rename(mapper=lambda x: 'temp_'+x, axis='columns', inplace=True)
 
 # join all bio data
-all_bio = bio_eda.join(bio_bvp).join(bio_hr).join(bio_temp)
+# all_bio = bio_eda.join(bio_bvp).join(bio_hr).join(bio_temp)
+all_bio = bio_eda.join(bio_hr).join(bio_temp)
 
 #filter out non-bio participants from the flat
 bio_parts = all_bio.index.levels[1]

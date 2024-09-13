@@ -19,7 +19,8 @@ from bio_preproc_funcs import decompose_eda_signal
 BIO_TEMP_DIR = 'Preproc/temp/bio/page_merge'
 TEMP_DIR = 'Preproc/temp'
 BIO_SOURCE_DIR = 'Raw_Data/bio_data'
-DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
+#DATA_FILE_NAMES = ['ACC', 'BVP', 'EDA', 'HR', 'IBI', 'TEMP']
+DATA_FILE_NAMES = ['EDA', 'HR', 'IBI', 'TEMP']
 OUTLIER_THOLD = 2.5
 
 
@@ -325,24 +326,24 @@ def process_new(part_dir, part_label, pt_data):
     avro_data_sets = [d for d in avro_data_sets if d is not None]
 
     # data containers
-    accelerometer_data = []
+    #accelerometer_data = []
     # gyroscope_data = []
     eda_data = []
     temperature_data = []
-    bvp_data = []
+    #bvp_data = []
     # systolic_peaks_data = []
-    steps_data = []
+    #steps_data = []
     # tags_data = []
 
     # process each avro file
     for data in avro_data_sets:
     
         # accelerometer
-        acc_w_time = get_bio_marker_for_tag_xyz(data, 'accelerometer')
-        if acc_w_time is None:
-            print (f"\t\t - Zero frequency detected. {part_dir} - {part_label} - accelerometer")
+        # acc_w_time = get_bio_marker_for_tag_xyz(data, 'accelerometer')
+        # if acc_w_time is None:
+        #     print (f"\t\t - Zero frequency detected. {part_dir} - {part_label} - accelerometer")
            
-        accelerometer_data.append(acc_w_time)
+        #accelerometer_data.append(acc_w_time)
         
         # gyroscope
         # gyro_w_time = get_bio_marker_for_tag_xyz(data, 'gyroscope', False)
@@ -351,8 +352,8 @@ def process_new(part_dir, part_label, pt_data):
         markers = [
             (eda_data, 'eda'),
             (temperature_data, 'temperature'),
-            (bvp_data, 'bvp'),
-            (steps_data, 'steps'),
+            #(bvp_data, 'bvp'),
+            #(steps_data, 'steps'),
             # (tags_data, 'tags'),
         ]
         
@@ -373,24 +374,24 @@ def process_new(part_dir, part_label, pt_data):
         # for sp in sps["peaksTimeNanos"]:
         #     systolic_peaks_data.append([sp])
                 
-    acc_df = pd.concat(accelerometer_data).sort_values('time')
+    #acc_df = pd.concat(accelerometer_data).sort_values('time')
     # gyro_df = pd.concat(gyroscope_data).sort_values('time')
     eda_df = pd.concat(eda_data).sort_values('time')
     temp_df = pd.concat(temperature_data).sort_values('time')
-    bvp_df = pd.concat(bvp_data).sort_values('time')
+    #bvp_df = pd.concat(bvp_data).sort_values('time')
     
     steps_df = None
-    if len(steps_data) > 0:
-        steps_df = pd.concat(steps_data).sort_values('time')
-    # tags_df = pd.concat(tags_data).sort_values('time')
+    # if len(steps_data) > 0:
+    #     steps_df = pd.concat(steps_data).sort_values('time')
+    # # tags_df = pd.concat(tags_data).sort_values('time')
  
     data_w_filenames = [
-    (acc_df, 'ACC'),
+    #(acc_df, 'ACC'),
     # (gyro_df, 'GYRO'),
     (eda_df, 'EDA'),
     (temp_df, 'TEMP'),
-    (bvp_df, 'BVP'),
-    (steps_df, 'STEPS'),
+    #(bvp_df, 'BVP'),
+    #(steps_df, 'STEPS'),
     # (tags_df, 'TAGS'),
     ]
  
