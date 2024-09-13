@@ -24,7 +24,7 @@ rm -f Analysis/output/*
 # Copy 
 [ -d Analysis/input ] || mkdir Analysis/input
 rm -f Analysis/input/*
-cp Preproc/output/* Analysis/input/
+cp -R Preproc/output/* Analysis/input/
 
 # run the prepoc code
 python Analysis/code/market_charts.py
