@@ -1,0 +1,26 @@
+﻿participant.id_in_session,participant.code,participant.label,participant._is_bot,participant._index_in_pages,participant._max_page_index,participant._current_app_name,participant._current_page_name,participant.time_started_utc,participant.visited,participant.mturk_worker_id,participant.mturk_assignment_id,participant.payoff,player.id_in_group,player.role,player.payoff,player.consent_given,player.button_clicked,group.id_in_subsession,subsession.round_number,session.code,session.label,session.mturk_HITId,session.mturk_HITGroupId,session.comment,session.is_demo
+1,69namur4,65fcdef120c3e7513256ac68,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:30.393926,1,,,654.17,1,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+2,r6yjev38,65d68bf56cbfc377f68be477,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:31.352535,1,,,579.61,2,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+3,ie4zikz6,66b3989c1078687882a1a2a5,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:31.831514,1,,,379.28,3,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+4,75zhyvem,663b8df565dd08db10006c4e,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:31.853122,1,,,415.02,4,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+5,ariugba7,55bb9ae7fdf99b26d27fda01,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:32.327946,1,,,845.36,5,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+6,ziw8rkra,66afc935bcb2252f63f1e2b2,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:32.437093,1,,,1035.23,6,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+7,7strzshd,663d1e842efe0b27087f52cb,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:33.487582,1,,,1130.21,7,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+8,izeiumnm,62e029ff528ea30b4508eaf5,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:42.039965,1,,,1014.32,8,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+9,jhk3p1jl,66d704abf53ea1690d42a898,0,367,368,payment,FinalResultsPage,2024-09-20 15:57:46.282710,1,,,289.81,9,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+10,y0gkttky,60c14a3e834adb62102cffa0,0,367,368,payment,FinalResultsPage,2024-09-20 15:58:09.123768,1,,,251.26,10,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+11,qep7655b,5b178611c9d3cb00010fe307,0,367,368,payment,FinalResultsPage,2024-09-20 15:58:12.416803,1,,,770.84,11,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+12,2bsfnin7,5c10a3702b16ba0001c8747a,0,367,368,payment,FinalResultsPage,2024-09-20 15:58:24.974419,1,,,1398.08,12,,0.0,1,1,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+13,ujgsevyd,loij0jds_82G,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.124753,1,,,0.0,13,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+14,m7tn2s5b,loij0jds_94C,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.147328,1,,,0.0,14,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+15,er82kr88,loij0jds_44Q,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.168542,1,,,0.0,15,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+16,k4fkh5x4,loij0jds_37G,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.188784,1,,,0.0,16,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+17,ecwae69d,loij0jds_79H,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.213449,1,,,0.0,17,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+18,fn791lza,loij0jds_31X,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.233747,1,,,0.0,18,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+19,7pwo276d,loij0jds_01J,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.255474,1,,,0.0,19,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+20,mjnmqhnw,loij0jds_73P,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.278172,1,,,0.0,20,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+21,iomlfpby,loij0jds_79V,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.299037,1,,,0.0,21,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+22,dip1pqa5,loij0jds_03D,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.319931,1,,,0.0,22,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+23,t94j6710,loij0jds_77A,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.358081,1,,,0.0,23,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+24,ccc4esp4,loij0jds_79Y,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.397213,1,,,0.0,24,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
+25,k4qmquq7,loij0jds_19S,0,368,368,payment,NonParticipantPage,2024-09-20 15:59:44.437836,1,,,0.0,25,,0.0,0,0,1,1,loij0jds,2024-09-20,,,Market Experiment,0
