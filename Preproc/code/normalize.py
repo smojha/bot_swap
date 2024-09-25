@@ -33,10 +33,6 @@ DUPLICATES = [
     ('6018a5c0e1600b187ccb8693', 'pmyan048'),    
 ]
 
-def flag_duplicates(df):
-    for pid, sess in DUPLICATES:
-        df.loc[(df.part_label == pid) & (df.session == sess), 'part_label'] = f'{pid}_dup'
-
 
 def get_df(base):
     paths =  Path(DATA_DIR).rglob(f'Hybrid*/{base}*.csv')
@@ -78,10 +74,14 @@ print("Normalizing")
 
 # Rounds Data
 rounds_data = get_df('rounds')
-
 rounds_data = remove_non_part(rounds_data)
 rounds_data.rename(mapper=common_map, axis=1, inplace=True)
-flag_duplicates(rounds_data)
+
+# Generate a map of session to date to augment participant labels
+sess_map = rounds_data[['session','session.label']].drop_duplicates().set_index('session')
+
+#Augment the participant label by appending the session date
+rounds_data['part_label'] = rounds_data.part_label + "_" + rounds_data['session.label']
 #rounds_data.drop(, axis=1, inplace=True)
 
 # Participant Data
@@ -115,27 +115,30 @@ orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
 orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
 
 
+def augment_part_labels(df, dates):
+    _df = df.join(dates, on='session')
+    df['part_label'] = _df.part_label + "_" + _df['session.label']
+
 #%% md
 # Payment
 #%%
 print("... Payment")
 payment_data = get_df('payment')
-flag_duplicates(payment_data)
+augment_part_labels(payment_data, sess_map)
 
 
 print("... Page Times")
 page_time_data = get_df('PageTimes')
 page_time_data.rename({'session_code': 'session'}, axis=1, inplace=True)
-part_labels_by_code = part_data.set_index('participant').part_label
+part_labels_by_code = part_data.set_index('participant').part_label  #This already contains the date augmentation
 page_time_data = page_time_data.join(part_labels_by_code, on='participant_code')
-flag_duplicates(page_time_data)
 
 ##
 # Landing Data - Contains the quiz
 ##
 landing_data = get_df('landingct')
 landing_data.rename(mapper=common_map, axis=1, inplace=True)
-flag_duplicates(landing_data)
+landing_data['part_label'] = landing_data.part_label + "_" + landing_data['session.label']
 landing_data = get_variables('player', landing_data, include_participant=True)
 
 ###############

@@ -55,11 +55,18 @@ def join_surveys():
     pre_2.rename(mapper=f, axis=1, inplace=True)
     post.rename(mapper=f, axis=1, inplace=True)
     
-    #flag duplicates
-    flag_duplicates(pre_1)
-    flag_duplicates(pre_2)
-    flag_duplicates(post)
+    pre_1['Timestamp'] = pre_1.Timestamp.str.slice(0, -3)
+    pre_2['Timestamp'] = pre_2.Timestamp.str.slice(0, -3)
+    post['Timestamp'] = post.Timestamp.str.slice(0, -3)
     
+    pre_1['sess_date'] = pd.to_datetime(pre_1.Timestamp).dt.strftime('%Y-%m-%d')
+    pre_2['sess_date'] = pd.to_datetime(pre_2.Timestamp).dt.strftime('%Y-%m-%d')
+    post['sess_date'] = pd.to_datetime(post.Timestamp).dt.strftime('%Y-%m-%d')
+    
+    #augment participant label
+    pre_1['part_label'] = pre_1.part_label + "_" + pre_1.sess_date
+    pre_2['part_label'] = pre_2.part_label + "_" + pre_2.sess_date
+    post['part_label'] = post.part_label + "_" + post.sess_date
     
     #
     #  Somehow, we are getting duplicate submissions.  Remove the duplicates
@@ -146,8 +153,8 @@ def fix_number_cols(df):
 #Remove the Timestamp and Unnamed columns
 def remove_unneeded(df):
     print ("# Removing uneeded survey columns")
-    drop = ['surv_confirm', 'surv_future_contact', 'surv_signature', 'surv_consent', 'surv_d_pre_1',
-            'surv_d_pre_2', 'surv_3dig_id', 'surv_d']
+    drop = ['surv_confirm', 'surv_future_contact', 'surv_signature', 'surv_consent',
+            'surv_3dig_id',]
     for c in list(df):
         if c.startswith("surv_Unnamed") or c.startswith('surv_Timestamp'):
             drop.append(c)
