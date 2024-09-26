@@ -24,7 +24,7 @@ part_data.drop(cols_to_drop, axis=1, inplace=True)
 
 ## Site Variable
 print ("\t... Site variable")
-is_lab =  part_data.part_label.str.len() < 20
+is_lab =  part_data.part_label.str.len() < 25
 part_data['site'] = 'Prolific'
 part_data.loc[is_lab, 'site'] = 'Lab'
 

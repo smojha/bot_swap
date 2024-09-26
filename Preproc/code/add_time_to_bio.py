@@ -66,7 +66,8 @@ def set_up(skip=True):
     # check for duplicate participant ids
     part_data = part_data[part_data.site == 'Lab']  # lose the prolific participants
     # shorten the participant labels to 3 characters to match the bio directories
-    part_data['plab_short'] = part_data.part_label.str[-3:] 
+    part_data['plab_short'] = part_data.part_label.str.replace(r"_\d\d\d\d.*", '', regex=True)
+    part_data['plab_short'] = part_data.plab_short.str[-3:] 
     # Check for duplicate ids
     c = part_data.groupby('plab_short').session.count()
     dups =  c[c>1]

@@ -22,17 +22,13 @@ group_data['round'] = group_data['round'] - start_round + 1
 player_data['round'] = player_data['round'] - start_round + 1
 order_data['round'] = order_data['round'] - start_round + 1
 
-print("\t... Determine short selling and buybacks for counterfactuals")
-
-## is margin violation
-player_data['is_mv'] = player_data['periods_until_auto_buy'] != -99
 
 #remove extraneous columns
 player_cols = list(player_data)
 player_cols_exclude = ['id_in_group', 'dr', 'dmu', 'forecast_error',
                        'forecast_reward', 'forecast_bonus_data', 'risk', 
                        'periods_until_auto_sell', 'periods_until_auto_buy',
-                       'is_mv', ]
+                       ]
 for c in  player_cols_exclude:
     player_cols.remove(c)
 player_data = player_data[player_cols]
@@ -114,7 +110,52 @@ print("\t... Equity calculations")
 df['stock_value'] = df.shares * df.market_price
 df['equity'] = df.shares * df.market_price + df.cash
 
+#Orderbook Pressure
+od = order_data.set_index(['session', 'round', 'type'])
+def get_order_book_pressure(x):
+    s = x.session.values[0]
+    r = x['round'].values[0]
+    price = x.price.values[0]
+    
+    try:
+        bids = od.loc[(s, r, 'BUY')]
+    except KeyError:
+        bids = None
+        
+    try:
+        asks = od.loc[(s, r, 'SELL')]
+    except:
+        asks = None
+        
+    
+    bids_below_price = bids[bids.price < price] if bids is not None else None
+    asks_above_price = asks[asks.price > price] if asks is not None else None
+    
+    if bids_below_price is None or bids_below_price.shape[0] == 0:
+        max_bid = 0 
+        bid_vol = 0    
+    else: 
+        max_bid = bids_below_price.price.max()
+        bid_vol = bids_below_price.quantity.sum()
 
+    if asks_above_price is None or asks_above_price.shape[0] == 0:   
+        min_ask = 0 
+        ask_vol = 0
+    else:
+        min_ask = asks_above_price.price.max()
+        ask_vol = asks_above_price.quantity.sum()
+    
+    if ask_vol == 0 and bid_vol == 0:
+        obp = 0
+    else:
+        obp = (max_bid * bid_vol + min_ask * ask_vol) / (bid_vol + ask_vol)
+    return obp
+
+
+book_pressure = group_data.groupby(['session', 'round']).apply(get_order_book_pressure)
+book_pressure.name='order_book_pressure'
+
+group_data = group_data.join(book_pressure, on=['session', 'round'])
 
 # Player - peak round diff
 
