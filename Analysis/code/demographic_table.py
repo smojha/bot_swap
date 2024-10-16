@@ -6,12 +6,10 @@ INPUT_DIR = "Analysis/input"
 TEX_DIR = "Analysis/temp/tex"
 
 sess_data = pd.read_csv(f"{INPUT_DIR}/session.csv").set_index('session')
+sess_data = sess_data.dropna()
 part_data = pd.read_csv(f"{INPUT_DIR}/participant.csv").set_index(['session', 'part_label'])
 
-#Clean up Race Variable
-WHAT = 'What race do you consider yourself? Write here:'
-part_data.loc[part_data.surv_race==WHAT, 'surv_race'] = 'Other'
-part_data.loc[part_data.surv_race.isna(), 'surv_race'] = 'Prefer Not to Say'
+
 
 
 def get_sess_stats(r):
@@ -59,23 +57,24 @@ def get_mean_stat(p, col, name, fmat='.2f'):
     
     return df
   
-MEAN_VARS = [('surv_age', 'Age'),
-                  ('quiz_grade', 'Quiz Grade'),
-                  ('quiz_1_init_score', 'Quiz 1'),
-                  ('quiz_2_init_score', 'Quiz 2'),
-                  ('quiz_3_init_score', 'Quiz 3'),
-                  ('quiz_4_init_score', 'Quiz 4'),
-                  ('quiz_5_init_score', 'Quiz 5'),
+MEAN_VARS = [
                   ('market_bonus', 'Market Bonus'),
                   ('forecast_bonus', 'Forecast Bonus'),
                   ('risk_bonus', 'Risk Bonus'),
                   ('total_bonus', 'Total Bonus'),
-                  ('surv_risk_gen', 'Risk Gen (pre)'),
-                  ('surv_risk_gen_post', 'Risk Gen (post)'),
-                  ('surv_invest_100_pre', 'Invest 100 (pre)'),
-                  ('surv_invest_100_post', 'Invest 100 (post)'),
+                  
                  ]       
-
+#('surv_age', 'Age'),
+# ('quiz_grade', 'Quiz Grade'),
+# ('quiz_1_init_score', 'Quiz 1'),
+# ('quiz_2_init_score', 'Quiz 2'),
+# ('quiz_3_init_score', 'Quiz 3'),
+# ('quiz_4_init_score', 'Quiz 4'),
+# ('quiz_5_init_score', 'Quiz 5'),
+# ('surv_risk_gen', 'Risk Gen (pre)'),
+# ('surv_risk_gen_post', 'Risk Gen (post)'),
+# ('surv_invest_100_pre', 'Invest 100 (pre)'),
+# ('surv_invest_100_post', 'Invest 100 (post)'),
 
 def get_part_stats(p, mean_vars):
 
@@ -94,14 +93,10 @@ def get_part_stats(p, mean_vars):
         
     df = pd.concat(rows)
     
-    race_count = get_count_stat(p, 'surv_race', 'Race')
-    gender_count = get_count_stat(p, 'surv_gender', "Gender")
-    df = pd.concat([df, race_count, gender_count])
 
     return df.fillna(0)
     
 
-    
 for sess, row in sess_data.iterrows():
     
     # Session Stats (includeing bubble metrics)
@@ -117,27 +112,15 @@ for sess, row in sess_data.iterrows():
     
 
 
-#What race do you consider yourself ? Write here:
     
     
 #Create stats table for all
-MEAN_VARS_FULL_QUIZ = [('surv_age', 'Age'),
-                  ('quiz_grade', 'Quiz Grade'),
-                  ('quiz_1_init_score', 'Quiz 1'),
-                  ('quiz_2_init_score', 'Quiz 2'),
-                  ('quiz_3_init_score', 'Quiz 3'),
-                  ('quiz_4_init_score', 'Quiz 4'),
-                  ('quiz_5_init_score', 'Quiz 5'),
+MEAN_VARS_FULL_QUIZ = [
                   ('market_bonus', 'Market Bonus'),
                   ('forecast_bonus', 'Forecast Bonus'),
                   ('risk_bonus', 'Risk Bonus'),
                   ('total_bonus', 'Total Bonus'),
-                  ('surv_risk_gen', 'Risk Gen (pre)'),
-                  ('surv_risk_gen_post', 'Risk Gen (post)'),
-                  ('surv_invest_100_pre', 'Invest 100 (pre)'),
-                  ('surv_invest_100_post', 'Invest 100 (post)'),
                  ]       
 all_stats = get_part_stats(part_data.reset_index(level=0, drop=True), MEAN_VARS_FULL_QUIZ)
 all_stats.style\
-    .format('{:.0f}', subset=pd.IndexSlice[['Race', 'Gender'], ['All', 'Lab', 'Prolific']])\
     .to_latex(f'{TEX_DIR}/stats_part_all.tex', hrules=True, multirow_align='t')

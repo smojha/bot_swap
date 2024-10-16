@@ -6,36 +6,8 @@ from pathlib import Path
 DATA_DIR = 'Raw_Data'
 TEMP_DIR = 'Preproc/temp'
 
-DUPLICATES = [
-    ('56f9364e895094000c8f4967', 'txyy1leq'),
-    ('5f7529755aaa0e1a6e804640', 'nhrerg4w'),
-    ('651c4484ba17050f6b716614', '19jfynhh'),
-    ('65a2bc0d60b1e46f4e1d3cc8', 'txyy1leq'),
-    ('62cd43d66c2dd7ae9ab53ae7', '19jfynhh'),
-    ('56f9364e895094000c8f4967', 'r0fz6tf4'),
-    ('5f7529755aaa0e1a6e804640', 'ao7syclg'),
-    ('6267c3d17f88988d0d787c7f', 'r46wgr8m'),
-    ('62cd43d66c2dd7ae9ab53ae7', 'r46wgr8m'),
-    ('651c4484ba17050f6b716614', 'r46wgr8m'),
-    ('65a2bc0d60b1e46f4e1d3cc8', 'r0fz6tf4'),    
-    ('5ed543442db0060a955d12e1', '100hm05f'),
-    ('612962f44f151ddfd0298c52', '100hm05f'),
-    ('62b0ff84054c6ca32f481c65', '100hm05f'),
-    ('632b947efa9da6a9bde31f94', '100hm05f'),
-    ('6654b7668e8642303bbc2fa7', '100hm05f'),   
-    ('5ed543442db0060a955d12e1', '4y7q8j7q'),
-    ('612962f44f151ddfd0298c52', '4y7q8j7q'),
-    ('62b0ff84054c6ca32f481c65', '4y7q8j7q'),
-    ('632b947efa9da6a9bde31f94', '4y7q8j7q'),
-    ('6654b7668e8642303bbc2fa7', '4y7q8j7q'),    
-    ('659daa1ed4e13d6428103c1f', '4vs1ljv7'),
-    ('66601438206fb7fc6c48a81f', '4vs1ljv7'),
-    ('6018a5c0e1600b187ccb8693', 'pmyan048'),    
-]
-
-
 def get_df(base):
-    paths =  Path(DATA_DIR).rglob(f'Hybrid*/{base}*.csv')
+    paths =  Path(DATA_DIR).rglob(f'*/{base}*.csv')
     dfs =  [pd.read_csv(p) for p in paths]
     concat = pd.concat(dfs)
     return concat
@@ -127,20 +99,6 @@ payment_data = get_df('payment')
 augment_part_labels(payment_data, sess_map)
 
 
-print("... Page Times")
-page_time_data = get_df('PageTimes')
-page_time_data.rename({'session_code': 'session'}, axis=1, inplace=True)
-part_labels_by_code = part_data.set_index('participant').part_label  #This already contains the date augmentation
-page_time_data = page_time_data.join(part_labels_by_code, on='participant_code')
-
-##
-# Landing Data - Contains the quiz
-##
-landing_data = get_df('landingct')
-landing_data.rename(mapper=common_map, axis=1, inplace=True)
-landing_data['part_label'] = landing_data.part_label + "_" + landing_data['session.label']
-landing_data = get_variables('player', landing_data, include_participant=True)
-
 ###############
 # Validating sessions
 # A cursory check of the data.  If any session is deemed to be incomplete or invalid
@@ -170,7 +128,6 @@ player_data = keep_good_sessions(player_data, good_sessions)
 group_data = keep_good_sessions(group_data, good_sessions)
 orders_data = keep_good_sessions(orders_data, good_sessions)
 payment_data = keep_good_sessions(payment_data, good_sessions)
-page_time_data = keep_good_sessions(page_time_data, good_sessions)
 
 ##  Don't run the landing through the good sessions filter.
 ## This is run in a separate session
@@ -187,14 +144,5 @@ sess_data.to_csv(f"{TEMP_DIR}/normalized_session.csv", index=None)
 player_data.to_csv(f"{TEMP_DIR}/normalized_player.csv", index=None)
 group_data.to_csv(f"{TEMP_DIR}/normalized_group.csv", index=None)
 orders_data.to_csv(f"{TEMP_DIR}/normalized_orders.csv", index=None)
-landing_data.to_csv(f"{TEMP_DIR}/normalized_landing.csv", index=None)
 payment_data.to_csv(f"{TEMP_DIR}/normalized_payment.csv", index=None)
-page_time_data.to_csv(f"{TEMP_DIR}/normalized_page_times.csv", index=None)
 
-# for c in part_data:
-#     print ("Casting ", c, part_data[c].dtype.kind)
-#     v= part_data[c].values.astype(str)
-#
-# a = part_data['mturk_assignment_id'].isna()
-# print("mturk_assignment_id: ", part_data['mturk_assignment_id'].dtype)
-# print(part_data['mturk_assignment_id'])

@@ -118,9 +118,5 @@ sess_data = sess_data.join(max_round)
 
 sess_data.drop('comment', axis='columns', inplace=True)
 
-# A mistake was made while setting up session: yh2bjr4n
-# An incorrect label was given.  The correct label should be 2024-04-04
-# That's the date the session was run
-sess_data.loc['yh2bjr4n', 'sess_date'] = '2024-04-04'
 
 sess_data.to_csv(f'{TEMP_DIR}/preproc_session.csv')
