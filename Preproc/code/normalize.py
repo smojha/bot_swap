@@ -77,6 +77,11 @@ print("... Groups")
 group_data = get_variables('group', rounds_data, include_rounds=True)
 group_data.drop('id_in_subsession', axis=1, inplace=True)
 
+
+def augment_part_labels(df, dates):
+    _df = df.join(dates, on='session')
+    df['part_label'] = _df.part_label + "_" + _df['session.label']
+
 #%% md
 # Orders
 #%%
@@ -85,11 +90,9 @@ orders_data = get_df('orders')
 orders_data.drop(['market_price', 'volume'], axis=1, inplace=True)
 orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
 orders_data.rename({'round_number': 'round'}, axis=1, inplace=True)
+augment_part_labels(orders_data, sess_map)
 
 
-def augment_part_labels(df, dates):
-    _df = df.join(dates, on='session')
-    df['part_label'] = _df.part_label + "_" + _df['session.label']
 
 #%% md
 # Payment
