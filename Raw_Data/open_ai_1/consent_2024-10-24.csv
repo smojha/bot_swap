@@ -1,0 +1,193 @@
+participant.id_in_session,participant.code,participant.label,participant._is_bot,participant._index_in_pages,participant._max_page_index,participant._current_app_name,participant._current_page_name,participant.time_started_utc,participant.visited,participant.mturk_worker_id,participant.mturk_assignment_id,participant.payoff,player.id_in_group,player.role,player.payoff,player.consent_given,player.button_clicked,group.id_in_subsession,subsession.round_number,session.code,session.label,session.mturk_HITId,session.mturk_HITGroupId,session.comment,session.is_demo
+1,dkg1nkbd,v0m3grox_16T,0,0,368,,,,0,,,0.0,1,,0.0,,,1,1,v0m3grox,2024-09-21,,,Market Experiment,1
+2,1ovi5twf,v0m3grox_14P,0,0,368,,,,0,,,0.0,2,,0.0,,,1,1,v0m3grox,2024-09-21,,,Market Experiment,1
+1,2slk8ma1,n9slx1c3_53O,0,365,368,rounds,FinalResultsPage,2024-09-30 20:44:59.997426,1,,,704.22,1,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+2,k70jlcxk,n9slx1c3_32X,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.202331,1,,,826.42,2,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+3,3kifwb2z,n9slx1c3_62F,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.225395,1,,,729.0,3,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+4,tx2cdzch,n9slx1c3_30J,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.247313,1,,,804.68,4,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+5,l25qvrng,n9slx1c3_39I,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.273962,1,,,698.38,5,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+6,6t0vcv3d,n9slx1c3_17J,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.296535,1,,,1072.45,6,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+7,lnkqdowe,n9slx1c3_69Z,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.314953,1,,,914.82,7,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+8,iy7zp4kb,n9slx1c3_82D,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.336670,1,,,1051.83,8,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+9,ynnpfehe,n9slx1c3_06Q,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.361449,1,,,848.78,9,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+10,pjrzzpo0,n9slx1c3_22G,0,365,368,rounds,FinalResultsPage,2024-09-30 20:45:00.387145,1,,,722.16,10,,0.0,1,1,1,1,n9slx1c3,2024-09-30,,,Market Experiment,0
+1,4bodkwz0,91yoqr0i_10A,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:15.884141,1,,,372.01,1,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+2,q0meb8fr,91yoqr0i_31J,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.088828,1,,,206.81,2,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+3,kyr0hdcu,91yoqr0i_64D,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.112979,1,,,185.77,3,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+4,ntn9mt0b,91yoqr0i_11O,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.134837,1,,,186.81,4,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+5,a48rg21e,91yoqr0i_10V,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.155100,1,,,339.21,5,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+6,qucp5iqg,91yoqr0i_24Z,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.183303,1,,,211.81,6,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+7,zz7ujz64,91yoqr0i_56W,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.201627,1,,,190.92,7,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+8,cmyzxjx6,91yoqr0i_91I,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.228346,1,,,213.52,8,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+9,v1pzes19,91yoqr0i_88G,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.250561,1,,,356.81,9,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+10,wfonsd0s,91yoqr0i_41J,0,360,368,rounds,RoundResultsPage,2024-09-30 21:22:16.275088,1,,,334.41,10,,0.0,1,1,1,1,91yoqr0i,2024-09-30,,,Market Experiment,0
+1,lyp7jali,tnrp4x8n_11C,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:24.921350,1,,,803.24,1,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+2,fw5voxye,tnrp4x8n_51Y,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.086140,1,,,981.01,2,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+3,sll8wt0g,tnrp4x8n_74L,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.108185,1,,,611.68,3,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+4,xir2bxi8,tnrp4x8n_33T,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.131847,1,,,709.06,4,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+5,wf3e1c1j,tnrp4x8n_02A,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.158531,1,,,774.56,5,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+6,ifoea8bp,tnrp4x8n_15G,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.182069,1,,,796.94,6,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+7,dzldtjsq,tnrp4x8n_53Q,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.200604,1,,,862.24,7,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+8,g0uyqvlu,tnrp4x8n_01W,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.226809,1,,,921.77,8,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+9,1m1bgaqm,tnrp4x8n_60L,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.253090,1,,,809.92,9,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+10,bzy6ccza,tnrp4x8n_49O,0,365,368,rounds,FinalResultsPage,2024-10-01 01:12:25.277378,1,,,774.17,10,,0.0,1,1,1,1,tnrp4x8n,2024-09-30,,,Market Experiment,0
+1,8ozo857x,hbopnibx_97M,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.230961,1,,,351.81,1,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+2,rf4xgfm4,hbopnibx_54R,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.402149,1,,,376.81,2,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+3,1obnip5r,hbopnibx_09R,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.424359,1,,,336.81,3,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+4,b7lpsg9n,hbopnibx_12Z,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.444071,1,,,377.76,4,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+5,h2bps6lh,hbopnibx_13R,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.472206,1,,,590.87,5,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+6,2w503qlr,hbopnibx_44A,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.492045,1,,,561.81,6,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+7,3mkn3eyb,hbopnibx_30Y,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.511730,1,,,351.81,7,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+8,ozru98x2,hbopnibx_41V,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.536150,1,,,356.81,8,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+9,9w6jy9sc,hbopnibx_63E,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.563860,1,,,336.81,9,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+10,kev8xi7a,hbopnibx_95R,0,54,368,rounds,RiskPage2,2024-10-01 01:49:58.591252,1,,,206.81,10,,0.0,1,1,1,1,hbopnibx,2024-09-30,,,Market Experiment,0
+1,vsdjxk6b,hy6ur0p0_05Y,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.473765,1,,,347.76,1,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+2,35prd576,hy6ur0p0_02T,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.674847,1,,,217.6,2,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+3,7lgplhbb,hy6ur0p0_24V,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.695566,1,,,191.73,3,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+4,4vsx6xiz,hy6ur0p0_14P,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.719521,1,,,207.85,4,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+5,7fcpkt8l,hy6ur0p0_27J,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.749234,1,,,590.14,5,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+6,x0wt0mmo,hy6ur0p0_15E,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.773613,1,,,341.73,6,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+7,d789csvf,hy6ur0p0_36J,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.796154,1,,,340.85,7,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+8,gjylw44r,hy6ur0p0_24E,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.827243,1,,,214.58,8,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+9,yjc671la,hy6ur0p0_99W,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.852578,1,,,386.17,9,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+10,hj299eu8,hy6ur0p0_17K,0,37,368,rounds,PracticeMarkerPage,2024-10-01 01:58:49.878879,1,,,353.88,10,,0.0,1,1,1,1,hy6ur0p0,2024-09-30,,,Market Experiment,0
+1,skv10ui1,8t7646lt_21P,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.442128,1,,,914.3,1,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+2,8lvroqem,8t7646lt_94I,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.640526,1,,,734.94,2,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+3,uijtovna,8t7646lt_02A,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.663888,1,,,810.39,3,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+4,hbado144,8t7646lt_62A,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.687963,1,,,994.04,4,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+5,cqqhoa6r,8t7646lt_23G,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.718916,1,,,970.77,5,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+6,pffh6g6f,8t7646lt_96I,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.744197,1,,,745.11,6,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+7,yl9e5hhx,8t7646lt_03M,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.771946,1,,,846.55,7,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+8,taujllne,8t7646lt_50V,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.877857,1,,,761.95,8,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+9,gotn5qxa,8t7646lt_87Q,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.927805,1,,,978.21,9,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+10,ipdu9515,8t7646lt_65I,0,367,368,payment,FinalResultsPage,2024-10-01 22:25:47.951503,1,,,734.15,10,,0.0,1,1,1,1,8t7646lt,2024-10-01,,,Full 10 agents using 4o,0
+1,n8p4lcgr,dydjaml1_98M,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.328288,1,,,753.87,1,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+2,d60o4c3d,dydjaml1_76Z,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.511909,1,,,706.04,2,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+3,2fzzepna,dydjaml1_17U,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.528113,1,,,1028.47,3,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+4,3d57rujq,dydjaml1_22A,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.558202,1,,,781.47,4,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+5,o5v2ykzg,dydjaml1_19Y,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.575921,1,,,898.77,5,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+6,9vumn1yb,dydjaml1_68D,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.596423,1,,,898.44,6,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+7,wkpx6foi,dydjaml1_43U,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.611232,1,,,947.86,7,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+8,cvbk6s6m,dydjaml1_08T,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.628630,1,,,851.76,8,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+9,f85tf1hw,dydjaml1_20T,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.644892,1,,,720.77,9,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+10,9aywigqw,dydjaml1_00D,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.665493,1,,,941.25,10,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+11,r6dq52pt,dydjaml1_78N,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.680896,1,,,816.83,11,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+12,7y5o81uq,dydjaml1_04C,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.697710,1,,,596.48,12,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+13,4mjkegky,dydjaml1_05K,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.715493,1,,,782.09,13,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+14,x5sobnvr,dydjaml1_03Y,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.731917,1,,,837.53,14,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+15,rxp1vgsi,dydjaml1_69U,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.753725,1,,,830.72,15,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+16,6unh3bjm,dydjaml1_15S,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.770306,1,,,1072.2,16,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+17,10lkhiuo,dydjaml1_68R,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.786558,1,,,848.17,17,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+18,2k22ntc5,dydjaml1_74E,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.806867,1,,,617.13,18,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+19,dxb2vk3o,dydjaml1_39R,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.825641,1,,,908.64,19,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+20,215emznz,dydjaml1_83I,0,367,368,payment,FinalResultsPage,2024-10-13 00:28:50.842264,1,,,648.09,20,,0.0,1,1,1,1,dydjaml1,2024-10-12,,,Market Experiment,0
+1,223d7ygk,508kp9hu_42B,0,12,368,rounds,RiskPage4,2024-10-13 19:29:54.235192,1,,,0.0,1,,0.0,1,1,1,1,508kp9hu,2024-10-13,,,Market Experiment,0
+2,xazfc9v3,508kp9hu_55D,0,12,368,rounds,RiskPage4,2024-10-13 19:29:54.411328,1,,,0.0,2,,0.0,1,1,1,1,508kp9hu,2024-10-13,,,Market Experiment,0
+1,mis4q0cx,4dbjvif9_89T,0,21,368,rounds,RiskPage2,2024-10-13 19:32:48.377581,1,,,0.0,1,,0.0,1,1,1,1,4dbjvif9,2024-10-13,,,Market Experiment,0
+2,1j05gxdo,4dbjvif9_54F,0,21,368,rounds,RiskPage2,2024-10-13 19:33:02.165896,1,,,0.0,2,,0.0,1,1,1,1,4dbjvif9,2024-10-13,,,Market Experiment,0
+1,7oqexfdg,z99ili1d_06H,0,21,368,rounds,RiskPage2,2024-10-13 19:38:00.681803,1,,,0.0,1,,0.0,1,1,1,1,z99ili1d,2024-10-13,,,Market Experiment,0
+2,jusn5xun,z99ili1d_73S,0,21,368,rounds,RiskPage2,2024-10-13 19:38:00.868333,1,,,0.0,2,,0.0,1,1,1,1,z99ili1d,2024-10-13,,,Market Experiment,0
+1,1gdlgw4a,dubw30c2_97J,0,27,368,rounds,MarketGridChoice,2024-10-13 19:42:50.084127,1,,,0.0,1,,0.0,1,1,1,1,dubw30c2,2024-10-13,,,Market Experiment,0
+2,st1yqsdn,dubw30c2_16I,0,27,368,rounds,MarketGridChoice,2024-10-13 19:42:50.252797,1,,,0.0,2,,0.0,1,1,1,1,dubw30c2,2024-10-13,,,Market Experiment,0
+1,shka7gj0,wjsiy4f2_86M,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.460317,1,,,891.31,1,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+2,8iglffgd,wjsiy4f2_33N,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.638215,1,,,861.31,2,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+3,951eb0zg,wjsiy4f2_66C,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.655178,1,,,751.37,3,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+4,l0m4l961,wjsiy4f2_80G,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.678720,1,,,741.03,4,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+5,pdxym8lv,wjsiy4f2_75D,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.696801,1,,,711.24,5,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+6,1kglqblp,wjsiy4f2_14X,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.722397,1,,,843.16,6,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+7,a9jsrbuu,wjsiy4f2_10K,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.745011,1,,,718.44,7,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+8,ru78yjyo,wjsiy4f2_15S,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.768666,1,,,729.36,8,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+9,5829jzun,wjsiy4f2_05X,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.791092,1,,,728.81,9,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+10,wzm6vxkz,wjsiy4f2_18T,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.814360,1,,,879.5,10,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+11,a91hhp44,wjsiy4f2_97E,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.833465,1,,,911.31,11,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+12,pldez7dr,wjsiy4f2_39R,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.863926,1,,,743.81,12,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+13,4dpvvh7p,wjsiy4f2_89N,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.881644,1,,,875.99,13,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+14,b1bju4b3,wjsiy4f2_44B,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.899886,1,,,894.36,14,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+15,8zlzai3l,wjsiy4f2_66G,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.925718,1,,,738.81,15,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+16,whwk23wu,wjsiy4f2_30I,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.984390,1,,,870.03,16,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+17,pi6jlthh,wjsiy4f2_29D,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.986509,1,,,744.28,17,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+18,hqhjskh1,wjsiy4f2_81U,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:35.988270,1,,,706.31,18,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+19,x913yduw,wjsiy4f2_35R,0,367,368,payment,FinalResultsPage,2024-10-13 21:35:04.938539,1,,,1086.31,19,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+20,ca4w9b5i,wjsiy4f2_30A,0,367,368,payment,FinalResultsPage,2024-10-13 21:37:36.048770,1,,,944.33,20,,0.0,1,1,1,1,wjsiy4f2,2024-10-13,,,Market Experiment w/ 20 agents + 4o + Lottery Choices + No mention of aggressive strategies,0
+1,0gob06o1,ixvjunnm_89E,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.381323,1,,,216.97,1,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+2,pijg93u0,ixvjunnm_29W,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.571738,1,,,381.97,2,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+3,u4myt9p5,ixvjunnm_34R,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.585706,1,,,211.97,3,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+4,9s7o2u90,ixvjunnm_03O,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.609611,1,,,211.97,4,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+5,5prycex1,ixvjunnm_45S,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.630240,1,,,596.97,5,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+6,81svrnd9,ixvjunnm_49V,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.651171,1,,,211.97,6,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+7,ckxuqbj2,ixvjunnm_40W,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.667294,1,,,211.97,7,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+8,1bbnkx6f,ixvjunnm_26Y,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.684519,1,,,361.97,8,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+9,0f8z6wtp,ixvjunnm_56A,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.701777,1,,,596.97,9,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+10,exfuf9zh,ixvjunnm_86D,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.718152,1,,,596.97,10,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+11,4o138bcd,ixvjunnm_07W,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.739670,1,,,341.97,11,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+12,yugo5exw,ixvjunnm_59W,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.757478,1,,,381.97,12,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+13,au67j9qf,ixvjunnm_71S,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.776857,1,,,343.47,13,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+14,moao6b5q,ixvjunnm_29S,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.794801,1,,,356.97,14,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+15,rdckn5sy,ixvjunnm_49G,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.815954,1,,,191.97,15,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+16,kcuny3zp,ixvjunnm_97R,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.831867,1,,,341.97,16,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+17,viptz3ym,ixvjunnm_95C,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.850692,1,,,590.47,17,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+18,cn9dutcp,ixvjunnm_75S,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.876190,1,,,591.97,18,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+19,sfgvzulg,ixvjunnm_02H,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.893532,1,,,381.97,19,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+20,yyjo5jt6,ixvjunnm_21H,0,105,368,rounds,ForecastPage,2024-10-14 01:57:47.916775,1,,,566.97,20,,0.0,1,1,1,1,ixvjunnm,2024-10-13,,,Market Experiment,0
+1,17o52rqs,ca3g7jh7_40O,0,367,368,payment,FinalResultsPage,2024-10-14 02:56:41.138393,1,,,677.95,1,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+2,y60pa15j,ca3g7jh7_96N,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.529521,1,,,1095.45,2,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+3,2wy462zu,ca3g7jh7_28F,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.544846,1,,,715.45,3,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+4,tfcv4u8s,ca3g7jh7_19N,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.564901,1,,,870.33,4,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+5,txvhe7ki,ca3g7jh7_79K,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.582749,1,,,915.45,5,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+6,u6m0nx96,ca3g7jh7_25T,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.601612,1,,,863.35,6,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+7,bx9w0de3,ca3g7jh7_68U,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.622217,1,,,1107.95,7,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+8,fkc357jo,ca3g7jh7_54V,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.639577,1,,,882.95,8,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+9,n31iq4ut,ca3g7jh7_60O,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.657873,1,,,910.05,9,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+10,wbl6tdyb,ca3g7jh7_89C,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.691548,1,,,749.58,10,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+11,rlcnt8j0,ca3g7jh7_43T,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.706345,1,,,1107.95,11,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+12,vmn2st3a,ca3g7jh7_28R,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.725891,1,,,912.95,12,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+13,ycp2mpc0,ca3g7jh7_82S,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.744735,1,,,742.95,13,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+14,hkfjllbs,ca3g7jh7_51T,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.764121,1,,,1087.95,14,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+15,cfctxpwy,ca3g7jh7_48N,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.780881,1,,,737.95,15,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+16,dlbwmrek,ca3g7jh7_03I,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.798799,1,,,727.95,16,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+17,vk0jbkvr,ca3g7jh7_90K,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.818055,1,,,746.33,17,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+18,50111zss,ca3g7jh7_92B,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.836101,1,,,912.95,18,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+19,87t5a6k7,ca3g7jh7_82F,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.862357,1,,,1105.45,19,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+20,s6gh7xk8,ca3g7jh7_05F,0,367,368,payment,FinalResultsPage,2024-10-14 02:59:37.877639,1,,,935.49,20,,0.0,1,1,1,1,ca3g7jh7,2024-10-13,,,Market Experiment,0
+1,e01fzjy6,n4tf4zjp_40B,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.644334,1,,,861.06,1,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+2,z02jia5b,n4tf4zjp_28S,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.835848,1,,,827.07,2,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+3,4ugg4c0c,n4tf4zjp_08N,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.850191,1,,,871.61,3,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+4,zg9fepx9,n4tf4zjp_10R,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.870094,1,,,854.35,4,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+5,x46jysbm,n4tf4zjp_67P,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.888542,1,,,711.0,5,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+6,jh6kr41g,n4tf4zjp_77C,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.905654,1,,,865.7,6,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+7,p2dqfzdi,n4tf4zjp_66H,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.923103,1,,,1111.39,7,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+8,dpr0rmnt,n4tf4zjp_62S,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.943940,1,,,842.28,8,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+9,etwmgsua,n4tf4zjp_24M,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.963364,1,,,672.28,9,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+10,7457s754,n4tf4zjp_01X,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.980264,1,,,1006.66,10,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+11,3fejo4lm,n4tf4zjp_51Q,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:08.997262,1,,,1050.73,11,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+12,xv4nvldh,n4tf4zjp_49M,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.016038,1,,,736.61,12,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+13,lujg6ycp,n4tf4zjp_94E,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.033517,1,,,915.76,13,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+14,h99115w8,n4tf4zjp_83R,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.054355,1,,,706.61,14,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+15,hw0yhiuw,n4tf4zjp_92C,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.070862,1,,,697.31,15,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+16,1tfirwx2,n4tf4zjp_03H,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.088997,1,,,1097.23,16,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+17,y1nxqoga,n4tf4zjp_93Q,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.105610,1,,,839.63,17,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+18,elwuoix7,n4tf4zjp_56D,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.122486,1,,,710.54,18,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+19,dkw1fn3o,n4tf4zjp_15Q,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.143896,1,,,1077.54,19,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+20,cge2zdvs,n4tf4zjp_48C,0,367,368,payment,FinalResultsPage,2024-10-14 06:27:09.164074,1,,,737.84,20,,0.0,1,1,1,1,n4tf4zjp,2024-10-13,,,Market Experiment - 20 agents w/ 4o - Mention of potentially needing to bid/ask previous market price and/or cross spread for fills,0
+1,hk3qro21,7w5kngml_32D,0,5,368,rounds,MarketGridChoice,2024-10-14 17:09:11.727458,1,,,0.0,1,,0.0,1,1,1,1,7w5kngml,2024-10-14,,,Market Experiment,0
+2,7t3t8gkj,7w5kngml_63J,0,5,368,rounds,MarketGridChoice,2024-10-14 17:09:11.914660,1,,,0.0,2,,0.0,1,1,1,1,7w5kngml,2024-10-14,,,Market Experiment,0
+1,cf15pmsb,q6j65aev_61V,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.536671,1,,,905.42,1,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+2,ylyiwt8h,q6j65aev_93W,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.705455,1,,,841.65,2,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+3,bvwtju9x,q6j65aev_27E,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.721733,1,,,904.73,3,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+4,tn2d5n20,q6j65aev_41T,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.745215,1,,,884.9,4,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+5,yn7gcuck,q6j65aev_75A,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.761322,1,,,726.37,5,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+6,x5605xgi,q6j65aev_98I,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.779092,1,,,718.95,6,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+7,l1f6cotw,q6j65aev_79F,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.796327,1,,,742.76,7,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+8,b0p2eyjx,q6j65aev_19U,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.817213,1,,,737.27,8,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+9,04kf3q30,q6j65aev_70I,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.835530,1,,,900.09,9,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+10,wohyfg5w,q6j65aev_36J,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.856003,1,,,675.28,10,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+11,vi4f2mwp,q6j65aev_14I,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.873749,1,,,742.78,11,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+12,ne3sbwpu,q6j65aev_80Q,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.892378,1,,,874.77,12,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+13,b7kznrif,q6j65aev_71R,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.911043,1,,,867.71,13,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+14,aiv4g5i3,q6j65aev_86W,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.932424,1,,,702.78,14,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+15,74q94cb9,q6j65aev_46T,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.949288,1,,,705.39,15,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+16,dyr2rm1s,q6j65aev_23F,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.967613,1,,,677.65,16,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+17,m0qxqpkz,q6j65aev_44J,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:50.985819,1,,,1042.78,17,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+18,os75lem4,q6j65aev_73B,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:51.004570,1,,,889.74,18,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+19,n5k52rej,q6j65aev_35I,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:51.026318,1,,,907.78,19,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
+20,49tecelj,q6j65aev_82E,0,367,368,payment,FinalResultsPage,2024-10-24 21:35:51.045931,1,,,859.14,20,,0.0,1,1,1,1,q6j65aev,2024-10-24,,,Market Experiment,0
