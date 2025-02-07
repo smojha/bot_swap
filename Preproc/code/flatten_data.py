@@ -2,8 +2,6 @@ import pandas as pd
 
 print("###\n###\n### Flattening Data")
 
-BIO_PAGE_TEMP_DIR = 'Preproc/temp/bio/page_merge'
-BIO_TEMP_PANELS_DIR = 'Preproc/temp/bio/panels'
 TEMP_DIR = 'Preproc/temp'
 
 #Read in experiment data
@@ -27,38 +25,7 @@ a = a.join(part_data, on='session')
 flat = a.join(player_data[player_columns], on=['part_label', 'round'])
 
 
-## Read in bio data
-# bio_bvp = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_BVP.csv").set_index(['page', 'part_label', 'round'])
-bio_eda = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_EDA.csv").set_index(['page', 'part_label', 'round'])
-bio_hr = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_HR.csv").set_index(['page', 'part_label', 'round'])
-bio_temp = pd.read_csv(f"{BIO_TEMP_PANELS_DIR}/bio_panel_TEMP.csv").set_index(['page', 'part_label', 'round'])
-
-# Rename bio columns
-# bio_bvp.rename(mapper=lambda x: 'bvp_'+x, axis='columns', inplace=True)
-bio_eda.rename(mapper=lambda x: 'eda_'+x, axis='columns', inplace=True)
-bio_hr.rename(mapper=lambda x: 'hr_'+x, axis='columns', inplace=True)
-bio_temp.rename(mapper=lambda x: 'temp_'+x, axis='columns', inplace=True)
-
-# join all bio data
-# all_bio = bio_eda.join(bio_bvp).join(bio_hr).join(bio_temp)
-all_bio = bio_eda.join(bio_hr).join(bio_temp)
-
-#filter out non-bio participants from the flat
-bio_parts = all_bio.index.levels[1]
-bio_flat = flat.reset_index().set_index('part_label').loc[bio_parts]
-
-#join bio data to flat data
-all_bio.reset_index(level=['page'], inplace=True)
-bio_flat = bio_flat.reset_index().set_index(['part_label', 'round'])
-flat_w_bio = bio_flat.join(all_bio)
-flat_w_bio = flat_w_bio.reset_index().sort_values(['sess_date', 'part_label', 'page', 'round'])
-
 
 #write to disk
 flat.to_csv(f"{TEMP_DIR}/flattened_data.csv")
-
-#Setting the index on the flat_w_bio frame, because that will ensure that
-# those columns are first in the lsit
-flat_w_bio.set_index(['part_label', 'round', 'page'], inplace=True)
-flat_w_bio.to_csv(f"{TEMP_DIR}/flattened_data_w_bio.csv")
 
